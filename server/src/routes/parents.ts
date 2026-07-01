@@ -123,6 +123,7 @@ parentsRouter.post("/invites", requireAuth, async (req, res) => {
   });
   if (!link && !ownProfile) return fail(res, 403, "You don't have access to this profile");
   const inviteProfile = link?.child ?? ownProfile!;
+  if (inviteProfile.profileType !== "child") return fail(res, 400, "Family invites can only be created for child profiles");
   const email = parsed.data.email?.trim().toLowerCase() || undefined;
   const inviteCode = generateInviteCode();
   const invite = await prisma.familyInvite.create({

@@ -6,9 +6,8 @@ import { Ionicons } from "@expo/vector-icons";
 import { Button } from "../../components/Button";
 import { LexLooMark } from "../../components/LexLooMark";
 import { TextField } from "../../components/TextField";
-import { ErrorState, LoadingState } from "../../components/StateViews";
-import { useAuth } from "../../context/AuthContext";
-import { useCreateFamilyInvite, useDeleteFamilyInvite, useFamilyInvites } from "../../api/queries";
+import { EmptyState, ErrorState, LoadingState } from "../../components/StateViews";
+import { useCreateFamilyInvite, useDeleteFamilyInvite, useFamilyInvites, useParentChildren } from "../../api/queries";
 import { fontFamily, fontSize, radius, shadow, spacing } from "../../theme";
 import { useColors } from "../../context/ThemeContext";
 
@@ -20,12 +19,14 @@ export function FamilyInvitesScreen() {
   const colors = useColors();
   const styles = useMemo(() => createStyles(colors), [colors]);
   const navigation = useNavigation<any>();
-  const { activeProfile } = useAuth();
   const invites = useFamilyInvites();
+  const children = useParentChildren();
   const createInvite = useCreateFamilyInvite();
   const deleteInvite = useDeleteFamilyInvite();
   const [email, setEmail] = useState("");
   const [latest, setLatest] = useState<{ id?: string; inviteCode: string; email?: string | null; deliveryStatus?: string } | null>(null);
+  const childOptions = (children.data ?? []).filter((child) => child.profile?.profileType === "child");
+  const targetChild = childOptions[0]?.profile;
 
   function confirmDelete(inviteId: string) {
     Alert.alert("Delete invite", "This invite code will stop working. This can't be undone.", [
@@ -44,10 +45,13 @@ export function FamilyInvitesScreen() {
   }
 
   async function create() {
-    if (!activeProfile?.id) return;
+    if (!targetChild?.id) {
+      Alert.alert("Add a child first", "Create a child profile before making a family invite.");
+      return;
+    }
     try {
       const invite = await createInvite.mutateAsync({
-        childProfileId: activeProfile.id,
+        childProfileId: targetChild.id,
         email: email.trim().toLowerCase() || undefined,
       });
       setLatest(invite);
@@ -72,10 +76,24 @@ export function FamilyInvitesScreen() {
     await Linking.openURL(`mailto:${target}?subject=${subject}&body=${body}`);
   }
 
-  if (invites.isLoading) return <LoadingState label="Loading invites..." />;
+  if (invites.isLoading || children.isLoading) return <LoadingState label="Loading invites..." />;
   if (invites.isError) return <ErrorState message="We couldn't load invites." onRetry={() => invites.refetch()} />;
+  if (children.isError) return <ErrorState message="We couldn't load child profiles." onRetry={() => children.refetch()} />;
 
   const pending = (invites.data ?? []).filter((invite) => invite.status === "pending");
+
+  if (!targetChild) {
+    return (
+      <SafeAreaView style={styles.safe} edges={["top", "left", "right"]}>
+        <EmptyState
+          title="No child profile yet"
+          message="Add a child profile before creating family invites."
+          actionLabel="Add Child"
+          onAction={() => navigation.navigate("AddChildProfile")}
+        />
+      </SafeAreaView>
+    );
+  }
 
   return (
     <SafeAreaView style={styles.safe} edges={["top", "left", "right"]}>
@@ -91,7 +109,7 @@ export function FamilyInvitesScreen() {
         <View style={styles.hero}>
           <Text style={styles.eyebrow}>Family</Text>
           <Text style={styles.title}>Share LexLoo invites.</Text>
-          <Text style={styles.subtitle}>Create an invite code for your account or family. Email is optional; the code can always be shared manually.</Text>
+          <Text style={styles.subtitle}>Create an invite code for {targetChild.name}. Email is optional; the code can always be shared manually.</Text>
         </View>
 
         <View style={styles.card}>
