@@ -84,7 +84,9 @@ function createStyles(colors: ReturnType<typeof useColors>) {
       flexDirection: "row",
       alignItems: "center",
       justifyContent: "space-between",
+      zIndex: 50,
       ...shadow.card,
+      elevation: 24,
     },
     item: {
       flex: 1,

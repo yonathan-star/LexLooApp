@@ -38,6 +38,7 @@ export function ProfileScreen() {
       secondaryLabel="Invites"
       onPrimary={() => navigation.navigate("EditProfile")}
       onSecondary={() => navigation.navigate("FamilyInvites")}
+      avoidFloatingTabBar
     />
   );
 }

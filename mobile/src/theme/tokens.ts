@@ -45,7 +45,7 @@ export const lightColors = {
   white: "#FFFFFF",
   overlay: "rgba(40, 35, 25, 0.45)",
   inputBackground: "rgba(237, 232, 220, 0.82)",
-  darkNav: "rgba(26, 23, 17, 0.96)",
+  darkNav: "#1A1711",
   inverseText: "#F5F0E8",
 };
 
@@ -94,7 +94,7 @@ export const darkColors: typeof lightColors = {
   white: "#FFFFFF",
   overlay: "rgba(0, 0, 0, 0.65)",
   inputBackground: "rgba(15, 28, 68, 0.90)",
-  darkNav: "rgba(6, 13, 36, 0.98)",
+  darkNav: "#060d24",
   inverseText: "rgba(255, 255, 255, 0.60)",
 };
 

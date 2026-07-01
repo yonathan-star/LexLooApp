@@ -31,6 +31,7 @@ export function LuminousNativeScreen({
   onPrimary,
   onSecondary,
   streakLabel,
+  avoidFloatingTabBar = false,
 }: {
   eyebrow?: string;
   title: string;
@@ -43,12 +44,13 @@ export function LuminousNativeScreen({
   onPrimary?: () => void;
   onSecondary?: () => void;
   streakLabel?: string;
+  avoidFloatingTabBar?: boolean;
 }) {
   const colors = useColors();
   const styles = useMemo(() => createStyles(colors), [colors]);
   return (
     <SafeAreaView style={styles.safe} edges={["top", "left", "right"]}>
-      <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
+      <ScrollView style={avoidFloatingTabBar ? styles.tabAwareScroll : undefined} contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
         <View style={styles.topBar}>
           <LexLooMark />
           {streakLabel ? (
@@ -113,7 +115,8 @@ function createStyles(colors: ReturnType<typeof useColors>) {
   return StyleSheet.create({
 
   safe: { flex: 1, backgroundColor: colors.background },
-  content: { paddingHorizontal: spacing.safeMargin, paddingTop: spacing.md, paddingBottom: spacing.xl, gap: spacing.lg },
+  tabAwareScroll: { marginBottom: 104 },
+  content: { paddingHorizontal: spacing.safeMargin, paddingTop: spacing.md, paddingBottom: 148, gap: spacing.lg },
   topBar: { flexDirection: "row", alignItems: "center", justifyContent: "space-between" },
   logo: { color: colors.primary, fontFamily: fontFamily.display, fontSize: fontSize.display, lineHeight: 38 },
   streakPill: { backgroundColor: colors.orangeWash, borderRadius: radius.pill, paddingHorizontal: spacing.sm, paddingVertical: 8 },
