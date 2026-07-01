@@ -16,6 +16,7 @@ import {
   useWord,
 } from "../../api/queries";
 import { EmptyState, ErrorState, LoadingState } from "../../components/StateViews";
+import { LexMascot } from "../../components/LexMascot";
 import { fontFamily, fontSize, glow, radius, shadow, spacing } from "../../theme";
 import { haptics } from "../../lib/haptics";
 import type { Word } from "../../types";
@@ -54,8 +55,16 @@ export function PracticeSessionScreen() {
   const isSpelling = activityType === "spelling";
 
   const pack = usePackDetail(!isMatch ? packId : undefined);
-  const packWordId = pack.data?.packWords?.[0]?.word?.id;
-  const wordId = route.params?.wordId ?? packWordId ?? recommendations.data?.wordOfDay?.word?.id ?? recommendations.data?.wearOfDay?.word?.id;
+  const [questionIndex, setQuestionIndex] = useState(0);
+  const [correctCount, setCorrectCount] = useState(0);
+  const practiceWords = useMemo(
+    () => (pack.data?.packWords ?? []).map((item) => item.word).filter(Boolean).slice(0, isSpelling || isMultipleChoice ? 5 : 1),
+    [isMultipleChoice, isSpelling, pack.data?.packWords]
+  );
+  const fallbackWord = packId ? undefined : recommendations.data?.wordOfDay?.word ?? recommendations.data?.wearOfDay?.word;
+  const activeQuestionWord = route.params?.wordId ? undefined : practiceWords[questionIndex];
+  const wordId = route.params?.wordId ?? activeQuestionWord?.id ?? fallbackWord?.id;
+  const sessionTotal = route.params?.wordId ? 1 : Math.max(1, practiceWords.length || (fallbackWord ? 1 : 0));
   const word = useWord(!isMatch ? wordId : undefined, profileId);
   const quiz = useQuizOptions(isMultipleChoice ? wordId : undefined);
 
@@ -98,6 +107,7 @@ export function PracticeSessionScreen() {
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
   const [typedAnswer, setTypedAnswer] = useState("");
   const [revealed, setRevealed] = useState(false);
+  const [feedback, setFeedback] = useState<{ answer: string; isCorrect: boolean } | null>(null);
   const startedAt = useRef(Date.now());
   const startedRef = useRef(false);
 
@@ -135,12 +145,14 @@ export function PracticeSessionScreen() {
   }, [activityType, isMatch, matchPackId, packId, pairs.length, profileId, startSession, wordId]);
 
   const options = useMemo(() => quiz.data?.options ?? [], [quiz.data?.options]);
-  const spellingBank = useMemo<Word[]>(() => {
-    if (!isSpelling) return [];
-    const packWords = (pack.data?.packWords ?? []).map((item) => item.word).filter(Boolean);
-    if (packWords.length) return packWords;
-    return word.data ? [word.data] : [];
-  }, [isSpelling, pack.data?.packWords, recommendations.data?.wearOfDay?.word, recommendations.data?.wordOfDay?.word, word.data]);
+
+  useEffect(() => {
+    setSelectedAnswer(null);
+    setTypedAnswer("");
+    setRevealed(false);
+    setFeedback(null);
+    startedAt.current = Date.now();
+  }, [wordId]);
 
   function retryStartSession() {
     setSessionError(false);
@@ -148,34 +160,24 @@ export function PracticeSessionScreen() {
     sessionIdRef.current = null;
     completingRef.current = false;
     startedRef.current = false;
+    setQuestionIndex(0);
+    setCorrectCount(0);
     startSession.reset();
   }
 
-  async function finish(score: number, correctCount: number, total: number, answer?: string, isCorrect = score >= 70) {
-    if (completingRef.current) return;
-    completingRef.current = true;
+  async function completePractice(score: number, finalCorrectCount: number, total: number) {
     try {
       let newBadges: { code: string; name: string }[] = [];
       let xpGained = 0;
       const activeSessionId = sessionIdRef.current ?? sessionId;
       if (profileId && activeSessionId) {
-        if (answer && wordId) {
-          await recordAttempt.mutateAsync({
-            sessionId: activeSessionId,
-            wordId,
-            promptType: activityType,
-            answer,
-            isCorrect,
-            responseTimeMs: Date.now() - startedAt.current,
-          });
-        }
         const result = await completeSession.mutateAsync({ sessionId: activeSessionId, score, profileId });
         newBadges = result.newBadges ?? [];
         xpGained = result.session.xpAwarded ?? 0;
       }
       navigation.navigate("PracticeResults", {
         score,
-        correctCount,
+        correctCount: finalCorrectCount,
         total,
         xpGained,
         newBadges,
@@ -188,6 +190,48 @@ export function PracticeSessionScreen() {
       completingRef.current = false;
       Alert.alert("Practice not saved", "We couldn't save this practice result. Please check your connection and try again.");
     }
+  }
+
+  async function submitAnswer(answer: string, isCorrect: boolean) {
+    if (completingRef.current) return;
+    try {
+      const activeSessionId = sessionIdRef.current ?? sessionId;
+      if (profileId && activeSessionId && wordId) {
+        await recordAttempt.mutateAsync({
+          sessionId: activeSessionId,
+          wordId,
+          promptType: activityType,
+          answer,
+          isCorrect,
+          responseTimeMs: Date.now() - startedAt.current,
+        });
+      }
+      const nextCorrectCount = correctCount + (isCorrect ? 1 : 0);
+      const isLastQuestion = questionIndex + 1 >= sessionTotal;
+      if (!isLastQuestion) {
+        setCorrectCount(nextCorrectCount);
+        setQuestionIndex((value) => value + 1);
+        return;
+      }
+      completingRef.current = true;
+      const score = Math.round((nextCorrectCount / sessionTotal) * 100);
+      await completePractice(score, nextCorrectCount, sessionTotal);
+    } catch {
+      completingRef.current = false;
+      Alert.alert("Practice not saved", "We couldn't save this answer. Please check your connection and try again.");
+    }
+  }
+
+  function chooseAnswer(answer: string, isCorrect: boolean) {
+    if (feedback) return;
+    if (isCorrect) haptics.success();
+    else haptics.error();
+    setFeedback({ answer, isCorrect });
+  }
+
+  function continueAfterFeedback() {
+    if (!feedback) return;
+    submitAnswer(feedback.answer, feedback.isCorrect);
   }
 
   function tapTile(tile: MatchTile) {
@@ -236,7 +280,8 @@ export function PracticeSessionScreen() {
             });
           }
         }
-        finish(score, pairs.length, pairs.length, undefined, score >= 70);
+        completingRef.current = true;
+        await completePractice(score, pairs.length, pairs.length);
       } catch {
         matchFinishedRef.current = false;
         Alert.alert("Practice not saved", "We couldn't save this match result. Please check your connection and try again.");
@@ -249,9 +294,7 @@ export function PracticeSessionScreen() {
     const normalizedTyped = typedAnswer.trim().toLowerCase();
     const normalizedWord = (word.data?.text ?? "").trim().toLowerCase();
     const isCorrect = Boolean(normalizedTyped && normalizedTyped === normalizedWord);
-    if (isCorrect) haptics.success();
-    else haptics.error();
-    finish(isCorrect ? 100 : 0, isCorrect ? 1 : 0, 1, typedAnswer, isCorrect);
+    chooseAnswer(typedAnswer, isCorrect);
   }
 
   if (isMatch) {
@@ -349,7 +392,7 @@ export function PracticeSessionScreen() {
           </Pressable>
           <LexLooMark />
           <View style={styles.pill}>
-            <Text style={styles.pillText}>{modeLabel}</Text>
+            <Text style={styles.pillText}>{sessionTotal > 1 ? `${questionIndex + 1}/${sessionTotal}` : modeLabel}</Text>
           </View>
         </View>
 
@@ -371,18 +414,7 @@ export function PracticeSessionScreen() {
                 returnKeyType="done"
                 onSubmitEditing={submitSpelling}
               />
-              {spellingBank.length > 1 ? (
-                <View style={styles.wordBank}>
-                  <Text style={styles.wordBankLabel}>Word Bank</Text>
-                  <View style={styles.wordBankGrid}>
-                    {spellingBank.map((bankWord) => (
-                      <View key={bankWord.id} style={styles.wordBankTile}>
-                        <Text style={styles.wordBankText}>{bankWord.text}</Text>
-                      </View>
-                    ))}
-                  </View>
-                </View>
-              ) : null}
+              <Text style={styles.spellingHint}>Use the meaning above as the clue. No word bank this time.</Text>
             </>
           ) : null}
           {!isMultipleChoice && !isSpelling ? (
@@ -397,53 +429,75 @@ export function PracticeSessionScreen() {
           <View style={styles.options}>
             {options.map((option) => {
               const active = selectedAnswer === option.wordId;
+              const isCorrectOption = option.wordId === quiz.data?.correctWordId;
+              const showCorrect = Boolean(feedback && isCorrectOption);
+              const showWrong = Boolean(feedback && active && !isCorrectOption);
               return (
                 <Pressable
                   key={option.wordId}
-                  style={[styles.option, active && styles.activeOption]}
+                  style={[styles.option, active && styles.activeOption, showCorrect && styles.correctOption, showWrong && styles.wrongOption]}
+                  disabled={Boolean(feedback)}
                   onPress={() => {
                     haptics.select();
                     setSelectedAnswer(option.wordId);
                   }}
                 >
-                  <Text style={[styles.optionText, active && styles.activeOptionText]}>{option.text}</Text>
-                  {active ? <Ionicons name="checkmark-circle" size={18} color={colors.primary} /> : null}
+                  <Text style={[styles.optionText, active && styles.activeOptionText, showCorrect && styles.correctOptionText, showWrong && styles.wrongOptionText]}>{option.text}</Text>
+                  {showCorrect ? <Ionicons name="checkmark-circle" size={20} color={colors.success} /> : null}
+                  {showWrong ? <Ionicons name="close-circle" size={20} color={colors.error} /> : null}
+                  {active && !feedback ? <Ionicons name="ellipse" size={14} color={colors.primary} /> : null}
                 </Pressable>
               );
             })}
           </View>
         ) : isSpelling ? null : (
           <View style={styles.options}>
-            <Pressable style={styles.option} onPress={() => finish(40, 0, 1, "needs_review", false)}>
+            <Pressable style={[styles.option, feedback?.answer === "needs_review" && styles.wrongOption]} disabled={Boolean(feedback)} onPress={() => chooseAnswer("needs_review", false)}>
               <Ionicons name="refresh-outline" size={18} color={colors.textPrimary} />
-              <Text style={styles.optionText}>Need Review</Text>
+              <Text style={[styles.optionText, feedback?.answer === "needs_review" && styles.wrongOptionText]}>Need Review</Text>
             </Pressable>
-            <Pressable style={[styles.option, styles.activeOption]} onPress={() => finish(100, 1, 1, "known", true)}>
+            <Pressable style={[styles.option, styles.activeOption, feedback?.answer === "known" && styles.correctOption]} disabled={Boolean(feedback)} onPress={() => chooseAnswer("known", true)}>
               <Ionicons name="checkmark-circle" size={18} color={colors.primary} />
-              <Text style={styles.activeOptionText}>I Know It</Text>
+              <Text style={[styles.activeOptionText, feedback?.answer === "known" && styles.correctOptionText]}>I Know It</Text>
             </Pressable>
           </View>
         )}
 
-        {isMultipleChoice ? (
+        {isMultipleChoice && !feedback ? (
           <Pressable
             style={[styles.primaryButton, !selectedAnswer && styles.disabledButton]}
             disabled={!selectedAnswer}
             onPress={() => {
               const isCorrect = selectedAnswer === quiz.data?.correctWordId;
-              if (isCorrect) haptics.success();
-              else haptics.error();
-              finish(isCorrect ? 100 : 0, isCorrect ? 1 : 0, 1, selectedAnswer ?? "", isCorrect);
+              chooseAnswer(selectedAnswer ?? "", isCorrect);
             }}
           >
-            <Text style={styles.primaryText}>Submit Answer</Text>
+            <Text style={styles.primaryText}>Check</Text>
           </Pressable>
         ) : null}
-        {isSpelling ? (
+        {isSpelling && !feedback ? (
           <Pressable style={[styles.primaryButton, !typedAnswer.trim() && styles.disabledButton]} disabled={!typedAnswer.trim()} onPress={submitSpelling}>
             <Ionicons name="checkmark-done" size={18} color={colors.onPrimary} />
-            <Text style={styles.primaryText}>Check Spelling</Text>
+            <Text style={styles.primaryText}>Check</Text>
           </Pressable>
+        ) : null}
+        {feedback ? (
+          <View style={[styles.feedbackCard, feedback.isCorrect ? styles.feedbackCorrect : styles.feedbackWrong]}>
+            <LexMascot size={76} mood={feedback.isCorrect ? "celebrate" : "happy"} />
+            <View style={styles.feedbackCopy}>
+              <Text style={[styles.feedbackTitle, { color: feedback.isCorrect ? colors.success : colors.error }]}>
+                {feedback.isCorrect ? "Nice!" : "Not quite"}
+              </Text>
+              <Text style={styles.feedbackBody}>
+                {feedback.isCorrect
+                  ? questionIndex + 1 >= sessionTotal ? "You got it. Finish the session to collect XP." : "Keep going. Lex has the next one ready."
+                  : `Correct answer: ${currentWord?.text ?? quiz.data?.prompt ?? "review this word"}`}
+              </Text>
+            </View>
+            <Pressable style={[styles.feedbackButton, feedback.isCorrect ? styles.feedbackButtonCorrect : styles.feedbackButtonWrong]} onPress={continueAfterFeedback}>
+              <Text style={styles.feedbackButtonText}>{questionIndex + 1 >= sessionTotal ? "Finish" : "Continue"}</Text>
+            </Pressable>
+          </View>
         ) : null}
       </ScrollView>
     </SafeAreaView>
@@ -524,6 +578,7 @@ function createStyles(colors: ReturnType<typeof useColors>) {
     paddingVertical: 10,
   },
   wordBankText: { color: colors.textPrimary, fontFamily: fontFamily.bodyBold, fontSize: 13 },
+  spellingHint: { color: colors.textMuted, fontFamily: fontFamily.body, fontSize: 13, lineHeight: 20, marginTop: spacing.sm, textAlign: "center" },
   options: { gap: spacing.md },
   option: {
     minHeight: 64,
@@ -538,10 +593,32 @@ function createStyles(colors: ReturnType<typeof useColors>) {
     ...shadow.card,
   },
   activeOption: { backgroundColor: colors.primaryWash, borderColor: colors.borderStrong },
+  correctOption: { backgroundColor: colors.successWash, borderColor: colors.success },
+  wrongOption: { backgroundColor: "rgba(186,26,26,0.12)", borderColor: colors.error },
   optionText: { flex: 1, color: colors.textPrimary, fontFamily: fontFamily.bodyBold, fontSize: 14, lineHeight: 22 },
   activeOptionText: { flex: 1, color: colors.primary, fontFamily: fontFamily.bodyBold, fontSize: 14, lineHeight: 22 },
+  correctOptionText: { color: colors.success },
+  wrongOptionText: { color: colors.error },
   primaryButton: { height: 60, borderRadius: radius.xl, backgroundColor: colors.primary, flexDirection: "row", gap: spacing.sm, alignItems: "center", justifyContent: "center", ...glow.primary },
   disabledButton: { opacity: 0.42 },
   primaryText: { color: colors.onPrimary, fontFamily: fontFamily.headline, fontSize: 16 },
+  feedbackCard: {
+    borderRadius: 28,
+    borderWidth: 1,
+    padding: spacing.md,
+    flexDirection: "row",
+    alignItems: "center",
+    gap: spacing.md,
+    ...shadow.card,
+  },
+  feedbackCorrect: { backgroundColor: colors.successWash, borderColor: colors.success },
+  feedbackWrong: { backgroundColor: "rgba(186,26,26,0.12)", borderColor: colors.error },
+  feedbackCopy: { flex: 1 },
+  feedbackTitle: { fontFamily: fontFamily.display, fontSize: 20, lineHeight: 26 },
+  feedbackBody: { color: colors.textSecondary, fontFamily: fontFamily.bodyBold, fontSize: 13, lineHeight: 19, marginTop: 2 },
+  feedbackButton: { minWidth: 112, height: 48, borderRadius: radius.pill, alignItems: "center", justifyContent: "center", paddingHorizontal: spacing.md },
+  feedbackButtonCorrect: { backgroundColor: colors.success },
+  feedbackButtonWrong: { backgroundColor: colors.error },
+  feedbackButtonText: { color: colors.white, fontFamily: fontFamily.headline, fontSize: 14 },
   });
 }

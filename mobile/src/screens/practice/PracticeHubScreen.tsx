@@ -59,7 +59,6 @@ export function PracticeHubScreen() {
   const startedAt = useRef(Date.now());
   const startedRef = useRef(false);
   const completingRef = useRef(false);
-  const requeuedIds = useRef(new Set<string>());
   const pan = useRef(new Animated.ValueXY()).current;
 
   useEffect(() => {
@@ -82,7 +81,6 @@ export function PracticeHubScreen() {
     startedAt.current = Date.now();
     startedRef.current = false;
     completingRef.current = false;
-    requeuedIds.current = new Set<string>();
     pan.setValue({ x: 0, y: 0 });
     startSession.reset();
     setSessionNonce((value) => value + 1);
@@ -164,15 +162,7 @@ export function PracticeHubScreen() {
     setFlipped(false);
     startedAt.current = Date.now();
 
-    // "Need Review" isn't just a no-op skip: the word gets one more lap at
-    // the end of the queue before the session can finish, so swiping left
-    // actually means something instead of just moving past it for good.
-    const shouldRequeue = !known && currentWord && !requeuedIds.current.has(currentWord.id);
-    if (shouldRequeue) requeuedIds.current.add(currentWord.id);
-    const effectiveTotal = shouldRequeue ? total + 1 : total;
-    if (shouldRequeue) setSessionQueue((prev) => [...prev, currentWord]);
-
-    const isLast = index + 1 >= effectiveTotal;
+    const isLast = index + 1 >= total;
     if (isLast) {
       if (completingRef.current) return;
       completingRef.current = true;
@@ -180,7 +170,7 @@ export function PracticeHubScreen() {
       let newBadges: { code: string; name: string }[] = [];
       if (sessionId && profileId) {
         try {
-          const score = effectiveTotal > 0 ? Math.round((nextCorrect / effectiveTotal) * 100) : 0;
+          const score = total > 0 ? Math.round((nextCorrect / total) * 100) : 0;
           const result = await completeSession.mutateAsync({ sessionId, score, profileId });
           xpGained = result.session.xpAwarded ?? 0;
           newBadges = result.newBadges ?? [];
@@ -192,9 +182,9 @@ export function PracticeHubScreen() {
       }
       setCompleted(true);
       navigation.navigate("PracticeResults", {
-        score: effectiveTotal > 0 ? Math.round((nextCorrect / effectiveTotal) * 100) : 0,
+        score: total > 0 ? Math.round((nextCorrect / total) * 100) : 0,
         correctCount: nextCorrect,
-        total: effectiveTotal,
+        total,
         xpGained,
         newBadges,
         title: "Flashcard Practice",
