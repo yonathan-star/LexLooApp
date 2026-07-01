@@ -123,9 +123,9 @@ const SPANISH_TRANSLATIONS: Record<string, string> = {
 
 const BADGES = [
   // Scanning
-  { code: "first_scan", name: "First Scan", description: "Scanned your very first LexLoo tile.", requirement: { type: "first_scan" } },
-  { code: "scan_explorer", name: "Scan Explorer", description: "Scanned 5 LexLoo tiles.", requirement: { type: "scans", count: 5 } },
-  { code: "scan_master", name: "Scan Master", description: "Scanned 25 LexLoo tiles.", requirement: { type: "scans", count: 25 } },
+  { code: "first_scan", name: "First Scan", description: "Scanned your very first LexLoo code.", requirement: { type: "first_scan" } },
+  { code: "scan_explorer", name: "Scan Explorer", description: "Scanned 5 LexLoo codes.", requirement: { type: "scans", count: 5 } },
+  { code: "scan_master", name: "Scan Master", description: "Scanned 25 LexLoo codes.", requirement: { type: "scans", count: 25 } },
   // Streaks
   { code: "streak_3", name: "On a Roll", description: "Practiced 3 days in a row.", requirement: { type: "streak", count: 3 } },
   { code: "streak_7", name: "7-Day Streak", description: "Learned something for 7 days in a row.", requirement: { type: "streak", count: 7 } },
@@ -152,7 +152,7 @@ const BADGES = [
 ];
 
 const MISSIONS = [
-  { code: "scan_1_tile", title: "Scan 1 tile", missionType: "daily", requirement: { type: "scan_tile", count: 1 }, xpReward: 10 },
+  { code: "scan_1_tile", title: "Scan 1 LexLoo Code", missionType: "daily", requirement: { type: "scan_tile", count: 1 }, xpReward: 10 },
   { code: "learn_3_words", title: "Learn 3 words", missionType: "daily", requirement: { type: "learn_words", count: 3 }, xpReward: 15 },
   { code: "complete_1_quiz", title: "Complete 1 quiz", missionType: "daily", requirement: { type: "complete_quiz", count: 1 }, xpReward: 15 },
   { code: "review_2_saved", title: "Review 2 saved words", missionType: "daily", requirement: { type: "review_saved", count: 2 }, xpReward: 10 },
