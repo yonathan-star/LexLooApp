@@ -6,7 +6,7 @@ import { HomeScreen } from "../screens/home/HomeScreen";
 import { ScannerScreen } from "../screens/scanner/ScannerScreen";
 import { ProgressDashboardScreen } from "../screens/progress/ProgressDashboardScreen";
 import { ProfileScreen } from "../screens/profile/ProfileScreen";
-import { FeatureComingSoonScreen } from "../screens/common/FeatureComingSoonScreen";
+import { LexCoachScreen } from "../screens/lex/LexCoachScreen";
 import { haptics } from "../lib/haptics";
 import { fontFamily, radius, shadow, spacing } from "../theme";
 import { useColors } from "../context/ThemeContext";
@@ -26,7 +26,7 @@ export function MainTabs() {
     <Tab.Navigator tabBar={(props) => <SlidingTabBar {...props} />} screenOptions={{ headerShown: false }}>
       <Tab.Screen name="HomeTab" component={HomeScreen} />
       <Tab.Screen name="ScannerTab" component={ScannerScreen} />
-      <Tab.Screen name="LexTab" component={FeatureComingSoonScreen} initialParams={{ featureName: "Lex, your AI vocabulary coach" }} />
+      <Tab.Screen name="LexTab" component={LexCoachScreen} />
       <Tab.Screen name="LexWorldTab" component={ProgressDashboardScreen} />
       <Tab.Screen name="MeTab" component={ProfileScreen} />
     </Tab.Navigator>
