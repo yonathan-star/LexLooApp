@@ -1,15 +1,13 @@
 import { LexLooMark } from "../../components/LexLooMark";
 import React, { useMemo } from "react";
-import { Image, Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
+import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
+import { LexMascot } from "../../components/LexMascot";
 import { haptics } from "../../lib/haptics";
 import { fontFamily, fontSize, glow, radius, shadow, spacing } from "../../theme";
 import { useColors } from "../../context/ThemeContext";
-
-const PRODUCT_IMAGE =
-  "https://lh3.googleusercontent.com/aida-public/AB6AXuCOPg7v8Qz0hbl233_IC53JqTe7NbN6FwaO6CI9J6-sAFtzV_KN-hyCdU_4IucBv2Ut_mQxD6OVDKX9z4uM2dAAAOMTJaSY04s1EXkwbYA0dYU8-72JmxXUrcMkgnHQLEbxW46v3xvMtlKYw--zaMtXoUQ3QeySqjP0v8Sm6tAYzZ9YtQA9LWv4TyeGB8cEc69jRqRNVeykLjqwL2loX6aLwSqGZI09DbV1T-mFPgXpGDhSHxwHuQ4H-PVPUrVUoQ-gZDQYeJ6HeVw5";
 
 export function WelcomeScreen() {
   const colors = useColors();
@@ -28,27 +26,25 @@ export function WelcomeScreen() {
           <View style={styles.glow} />
           <View style={styles.orbitLarge} />
           <View style={styles.orbitSmall} />
-          <View style={styles.productGlass}>
-            <Image source={{ uri: PRODUCT_IMAGE }} style={styles.productImage} />
-          </View>
+          <LexMascot size={168} mood="celebrate" />
           <View style={styles.dataPill}>
             <Ionicons name="sparkles" size={14} color={colors.primary} />
-            <Text style={styles.dataText}>AI Decoded</Text>
+            <Text style={styles.dataText}>Daily Word Ready</Text>
           </View>
         </View>
 
         <View style={styles.copyBlock}>
           <View style={styles.badge}>
-            <Text style={styles.badgeText}>PREMIUM WEARABLE LEARNING</Text>
+            <Text style={styles.badgeText}>FAST VOCABULARY HABITS</Text>
           </View>
-          <Text style={styles.headline}>Learn. Wear. Master.</Text>
-          <Text style={styles.subhead}>Wear vocabulary tiles on your bracelet, scan them, and master words through daily practice.</Text>
+          <Text style={styles.headline}>Learn one word. Feel smarter today.</Text>
+          <Text style={styles.subhead}>Lex helps you discover today's word, practice it fast, earn rewards, and keep your streak alive.</Text>
         </View>
 
         <View style={styles.steps}>
-          <WelcomeStep icon="cube-outline" title="Choose your word tiles" body="Pick a vocabulary pack and snap tiles into your LexLoo bracelet." />
-          <WelcomeStep icon="watch-outline" title="Wear your bracelet" body="Keep your daily word visible as a real-world reminder." />
-          <WelcomeStep icon="school-outline" title="Scan, learn, master" body="Open definitions, translations, examples, and practice games." />
+          <WelcomeStep icon="gift-outline" title="Reveal today's word" body="Open the app and get one clear discovery in seconds." />
+          <WelcomeStep icon="flash-outline" title="Practice fast" body="Answer quick, colorful prompts with instant feedback." />
+          <WelcomeStep icon="trophy-outline" title="Earn rewards" body="Collect LexPoints, streaks, saved words, and rank progress." />
         </View>
       </ScrollView>
 
@@ -62,7 +58,7 @@ export function WelcomeScreen() {
           style={styles.primaryButton}
           onPress={() => {
             haptics.tap();
-            navigation.navigate("CreateAccount");
+            navigation.navigate("PreAccountOnboarding");
           }}
         >
           <Text style={styles.primaryText}>Get Started</Text>
@@ -138,7 +134,6 @@ function createStyles(colors: ReturnType<typeof useColors>) {
     justifyContent: "center",
     ...shadow.card,
   },
-  productImage: { width: "100%", height: "100%" },
   dataPill: {
     position: "absolute",
     top: 36,

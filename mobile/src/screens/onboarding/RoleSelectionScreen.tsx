@@ -13,7 +13,7 @@ import { useColors } from "../../context/ThemeContext";
 type ProfileType = "student" | "parent" | "adult_learner";
 
 const OPTIONS: { type: ProfileType; title: string; body: string; icon: keyof typeof Ionicons.glyphMap }[] = [
-  { type: "student", title: "Learner", body: "I am building vocabulary with my LexLoo bracelet.", icon: "school" },
+  { type: "student", title: "Learner", body: "I am building vocabulary with daily words and quick practice.", icon: "school" },
   { type: "parent", title: "Parent", body: "I want to follow a child's progress and weekly reports.", icon: "people" },
   { type: "adult_learner", title: "Adult learner", body: "I am practicing for myself.", icon: "book" },
 ];

@@ -114,7 +114,7 @@ export function ProgressDashboardScreen() {
         </View>
 
         <View style={styles.sectionHeader}>
-          <Text style={styles.sectionTitle}>Account &amp; Settings</Text>
+          <Text style={styles.sectionTitle}>Account & Settings</Text>
         </View>
         <View style={styles.listCard}>
           <ListRow icon="albums-outline" label="Packs" onPress={() => navigation.navigate("PackLibrary")} />

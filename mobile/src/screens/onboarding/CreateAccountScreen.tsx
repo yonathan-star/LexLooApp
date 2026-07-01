@@ -1,9 +1,10 @@
 import React, { useState, useMemo } from "react";
 import { Alert, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
 import { LexLooMark } from "../../components/LexLooMark";
+import { LexMascot } from "../../components/LexMascot";
 import { TextField } from "../../components/TextField";
 import { useAuth } from "../../context/AuthContext";
 import { fontFamily, fontSize, glow, radius, shadow, spacing } from "../../theme";
@@ -16,8 +17,9 @@ export function CreateAccountScreen() {
   const colors = useColors();
   const styles = useMemo(() => createStyles(colors), [colors]);
   const navigation = useNavigation<any>();
+  const route = useRoute<any>();
   const { register, verifyRegistration } = useAuth();
-  const [displayName, setDisplayName] = useState("");
+  const [displayName, setDisplayName] = useState(route.params?.displayName ?? "");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [role, setRole] = useState<Role>("student");
@@ -87,12 +89,13 @@ export function CreateAccountScreen() {
         </View>
 
         <View style={styles.hero}>
-          <Text style={styles.eyebrow}>{challenge ? "Verification" : "Wear & Learn"}</Text>
-          <Text style={styles.title}>{challenge ? "Enter your verification code" : "Create your LexLoo account"}</Text>
+          {!challenge ? <LexMascot size={92} mood="celebrate" /> : null}
+          <Text style={styles.eyebrow}>{challenge ? "Verification" : "Meet Lex"}</Text>
+          <Text style={styles.title}>{challenge ? "Enter your verification code" : "Peel your potential."}</Text>
           <Text style={styles.subtitle}>
             {challenge
               ? `Enter the code emailed to ${challenge.deliveryTarget}.`
-              : "Set up your account, verify it, then pick a bracelet tile pack and scan your first word."}
+              : "Each word is a segment. Build enough small segments and you build something incredible."}
             {challenge?.devCode ? ` Dev code: ${challenge.devCode}` : ""}
           </Text>
         </View>
@@ -110,6 +113,21 @@ export function CreateAccountScreen() {
             />
           ) : (
             <>
+              <View style={styles.socialStack}>
+                <Pressable style={styles.socialButton} onPress={() => Alert.alert("Coming soon", "Apple sign-in will be connected before launch.")}>
+                  <Ionicons name="logo-apple" size={20} color={colors.textPrimary} />
+                  <Text style={styles.socialText}>Continue with Apple</Text>
+                </Pressable>
+                <Pressable style={styles.socialButton} onPress={() => Alert.alert("Coming soon", "Google sign-in will be connected before launch.")}>
+                  <Ionicons name="logo-google" size={20} color={colors.textPrimary} />
+                  <Text style={styles.socialText}>Continue with Google</Text>
+                </Pressable>
+              </View>
+              <View style={styles.dividerRow}>
+                <View style={styles.divider} />
+                <Text style={styles.dividerText}>or email</Text>
+                <View style={styles.divider} />
+              </View>
               <TextField label="Name" value={displayName} onChangeText={setDisplayName} placeholder="Learner name" autoCapitalize="words" />
               <TextField label="Email" value={email} onChangeText={setEmail} placeholder="you@example.com" autoCapitalize="none" keyboardType="email-address" />
               <TextField label="Password" value={password} onChangeText={setPassword} placeholder="At least 8 characters" secureTextEntry />
@@ -162,6 +180,22 @@ function createStyles(colors: ReturnType<typeof useColors>) {
   title: { color: colors.textPrimary, fontFamily: fontFamily.display, fontSize: fontSize.xl, lineHeight: 34, marginTop: spacing.sm },
   subtitle: { color: colors.textSecondary, fontFamily: fontFamily.body, fontSize: 15, lineHeight: 24, marginTop: spacing.sm },
   formCard: { borderRadius: 24, backgroundColor: colors.card, borderWidth: 1, borderColor: colors.border, padding: spacing.lg, ...shadow.card },
+  socialStack: { gap: spacing.sm, marginBottom: spacing.md },
+  socialButton: {
+    height: 54,
+    borderRadius: 18,
+    borderWidth: 1,
+    borderColor: colors.border,
+    backgroundColor: colors.cardHighest,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: spacing.sm,
+  },
+  socialText: { color: colors.textPrimary, fontFamily: fontFamily.bodyBold, fontSize: 14 },
+  dividerRow: { flexDirection: "row", alignItems: "center", gap: spacing.sm, marginBottom: spacing.md },
+  divider: { flex: 1, height: 1, backgroundColor: colors.border },
+  dividerText: { color: colors.textMuted, fontFamily: fontFamily.bodyBold, fontSize: 11, textTransform: "uppercase" },
   codeInput: {
     height: 58,
     borderRadius: 18,

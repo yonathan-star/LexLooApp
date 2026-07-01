@@ -49,13 +49,13 @@ export function ReminderSetupScreen() {
           </View>
           <Text style={styles.eyebrow}>Daily rhythm</Text>
           <Text style={styles.title}>Want a gentle practice reminder?</Text>
-          <Text style={styles.subtitle}>LexLoo can remind you to scan a tile, practice a pack, and keep your streak alive.</Text>
+          <Text style={styles.subtitle}>LexLoo can nudge you when your daily word is ready and your streak needs a quick win.</Text>
         </View>
 
         <View style={styles.card}>
-          <InfoRow icon="scan" title="Scan your bracelet tile" />
-          <InfoRow icon="book" title="Practice your active pack" />
-          <InfoRow icon="flame" title="Keep streaks and XP moving" />
+          <InfoRow icon="gift" title="Reveal today's word" />
+          <InfoRow icon="book" title="Practice in under a minute" />
+          <InfoRow icon="flame" title="Keep streaks and LexPoints moving" />
         </View>
 
         <Button label="Turn On Reminders" onPress={() => finish(true)} loading={saveNotificationPreferences.isPending} />

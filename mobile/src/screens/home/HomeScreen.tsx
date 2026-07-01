@@ -26,7 +26,6 @@ function useJumpToScannerAfterOnboarding() {
   useEffect(() => {
     if (justOnboarded && !handledRef.current) {
       handledRef.current = true;
-      navigation.navigate("ScannerTab");
       clearJustOnboarded();
     }
   }, [justOnboarded, navigation, clearJustOnboarded]);
@@ -147,7 +146,7 @@ export function HomeScreen() {
             </View>
 
             <Text style={styles.definition}>
-              {dailyWord?.content?.shortDefinition ?? "Scan a tile or pick a pack in Practice to unlock your first word of the day."}
+              {dailyWord?.content?.shortDefinition ?? "Pick a learning goal to unlock your first word of the day."}
             </Text>
 
             {dailyWord?.examples?.[0] ? (

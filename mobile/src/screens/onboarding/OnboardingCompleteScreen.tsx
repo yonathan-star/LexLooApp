@@ -4,6 +4,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
 import { Button } from "../../components/Button";
 import { LexLooMark } from "../../components/LexLooMark";
+import { LexMascot } from "../../components/LexMascot";
 import { useAuth } from "../../context/AuthContext";
 import { trackScreenEvent } from "../../lib/analytics";
 import { fontFamily, fontSize, glow, shadow, spacing } from "../../theme";
@@ -24,21 +25,19 @@ export function OnboardingCompleteScreen() {
       <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
         <LexLooMark />
         <View style={styles.hero}>
-          <View style={styles.medallion}>
-            <Ionicons name="checkmark" size={42} color={colors.onPrimary} />
-          </View>
-          <Text style={styles.eyebrow}>Ready</Text>
-          <Text style={styles.title}>Your bracelet practice is set.</Text>
-          <Text style={styles.subtitle}>Scan a LexLoo vocabulary tile, open your pack, and start building mastery.</Text>
+          <LexMascot size={116} mood="celebrate" />
+          <Text style={styles.eyebrow}>You're all set</Text>
+          <Text style={styles.title}>Let's discover your first word.</Text>
+          <Text style={styles.subtitle}>Each word is one segment. Keep stacking them and your LexWorld grows.</Text>
         </View>
 
         <View style={styles.card}>
-          <Step icon="scan" title="Scan physical tiles" />
-          <Step icon="library" title="Practice your selected pack" />
-          <Step icon="trophy" title="Earn XP, streaks, and badges" />
+          <Step icon="gift" title="Reveal today's word" />
+          <Step icon="flash" title="Practice with instant feedback" />
+          <Step icon="trophy" title="Earn LexPoints, streaks, and ranks" />
         </View>
 
-        <Button label="Start LexLoo" onPress={complete} />
+        <Button label="Discover Today's Word" onPress={complete} />
       </ScrollView>
     </SafeAreaView>
   );

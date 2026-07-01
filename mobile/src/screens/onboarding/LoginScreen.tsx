@@ -74,7 +74,7 @@ export function LoginScreen() {
           <Text style={styles.subtitle}>
             {mfaChallenge
               ? `Enter the code emailed to ${mfaChallenge.deliveryTarget}.`
-              : "Continue scanning bracelet tiles, tracking progress, and managing family learning."}
+              : "Continue your daily words, streaks, LexWorld progress, and family learning."}
             {mfaChallenge?.devCode ? ` Dev code: ${mfaChallenge.devCode}` : ""}
           </Text>
         </View>
