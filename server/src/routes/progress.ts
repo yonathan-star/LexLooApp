@@ -181,8 +181,8 @@ progressRouter.post("/mark-learned", requireAuth, async (req, res) => {
     create: { ...parsed.data, status: "learned", masteryScore: 40, correctCount: 1, lastSeenAt: new Date() },
     update: {
       lastSeenAt: new Date(),
-      status: "learned",
-      masteryScore: Math.min(100, (existing?.masteryScore ?? 0) + 10),
+      status: existing?.status === "mastered" ? "mastered" : "learned",
+      masteryScore: existing?.status === "mastered" ? existing.masteryScore : Math.min(100, (existing?.masteryScore ?? 0) + 10),
       correctCount: { increment: 1 },
     },
   });
@@ -198,6 +198,8 @@ progressRouter.post("/mark-learned", requireAuth, async (req, res) => {
 progressRouter.get("/word/:wordId", requireAuth, async (req, res) => {
   const profileId = req.query.profileId as string;
   if (!profileId) return fail(res, 400, "profileId is required");
+  const hasAccess = await canAccessProfile(req.auth!.userId, req.auth!.role, profileId);
+  if (!hasAccess) return fail(res, 403, "You don't have access to this profile");
   const progress = await prisma.userWordProgress.findUnique({
     where: { profileId_wordId: { profileId, wordId: req.params.wordId } },
   });

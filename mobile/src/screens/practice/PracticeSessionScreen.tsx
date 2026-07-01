@@ -104,7 +104,7 @@ export function PracticeSessionScreen() {
   useEffect(() => {
     if (!profileId || startedRef.current) return;
     if (isMatch) {
-      if (!matchPackId) return;
+      if (!matchPackId || pairs.length < 2) return;
       startedRef.current = true;
       setSessionError(false);
       startSession
@@ -132,7 +132,7 @@ export function PracticeSessionScreen() {
         setSessionError(true);
         startedRef.current = false;
       });
-  }, [activityType, isMatch, matchPackId, packId, profileId, startSession, wordId]);
+  }, [activityType, isMatch, matchPackId, packId, pairs.length, profileId, startSession, wordId]);
 
   const options = useMemo(() => quiz.data?.options ?? [], [quiz.data?.options]);
   const spellingBank = useMemo<Word[]>(() => {
@@ -222,20 +222,25 @@ export function PracticeSessionScreen() {
     matchFinishedRef.current = true;
     const score = Math.max(0, 100 - attempts * 10);
     async function completeMatch() {
-      const activeSessionId = sessionIdRef.current ?? sessionId;
-      if (profileId && activeSessionId) {
-        for (const pair of pairs) {
-          await recordAttempt.mutateAsync({
-            sessionId: activeSessionId,
-            wordId: pair.id,
-            promptType: "match",
-            answer: "matched",
-            isCorrect: true,
-            responseTimeMs: Date.now() - startedAt.current,
-          });
+      try {
+        const activeSessionId = sessionIdRef.current ?? sessionId;
+        if (profileId && activeSessionId) {
+          for (const pair of pairs) {
+            await recordAttempt.mutateAsync({
+              sessionId: activeSessionId,
+              wordId: pair.id,
+              promptType: "match",
+              answer: "matched",
+              isCorrect: true,
+              responseTimeMs: Date.now() - startedAt.current,
+            });
+          }
         }
+        finish(score, pairs.length, pairs.length, undefined, score >= 70);
+      } catch {
+        matchFinishedRef.current = false;
+        Alert.alert("Practice not saved", "We couldn't save this match result. Please check your connection and try again.");
       }
-      finish(score, pairs.length, pairs.length, undefined, score >= 70);
     }
     completeMatch();
   }, [attempts, isMatch, matchedIds.size, pairs, pairs.length, profileId, recordAttempt, sessionId]);
@@ -252,6 +257,18 @@ export function PracticeSessionScreen() {
   if (isMatch) {
     if (allPacks.isLoading || matchPack.isLoading) return <LoadingState label="Loading match game..." />;
     if (allPacks.isError || matchPack.isError) return <ErrorState message="We couldn't load this match game." onRetry={() => matchPack.refetch()} />;
+    if (pairs.length < 2) {
+      return (
+        <SafeAreaView style={styles.safe} edges={["top", "left", "right"]}>
+          <EmptyState
+            title="Not enough words yet"
+            message="Choose a pack with at least two words before starting match mode."
+            actionLabel="Browse Packs"
+            onAction={() => navigation.navigate("PackLibrary")}
+          />
+        </SafeAreaView>
+      );
+    }
     if (sessionError) return <ErrorState message="We couldn't start this match session." onRetry={retryStartSession} />;
     if (!sessionId) return <LoadingState label="Starting match session..." />;
 

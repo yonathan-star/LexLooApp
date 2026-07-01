@@ -71,8 +71,8 @@ scansRouter.post("/", requireAuth, async (req, res) => {
   if (result === "not_found") {
     const message =
       reason === "not_assigned"
-        ? "This LexLoo tile is real, but it is not assigned to a word yet."
-        : "We could not read that tile. Try again or enter the code manually.";
+        ? "This LexLoo code is real, but it is not assigned to a word yet."
+        : "We could not read that code. Try again or enter it manually.";
     return ok(res, { scan, word: null, pack: tile?.pack ?? null, tile: tile ?? null, reason, message });
   }
 
