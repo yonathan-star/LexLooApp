@@ -29,7 +29,7 @@ export function LearningHistoryScreen() {
       }))}
       primaryLabel="Practice"
       secondaryLabel="Back to Progress"
-      onPrimary={() => navigation.navigate("PracticeTab")}
+      onPrimary={() => navigation.navigate("PracticeHub")}
       onSecondary={() => navigation.goBack()}
     />
   );

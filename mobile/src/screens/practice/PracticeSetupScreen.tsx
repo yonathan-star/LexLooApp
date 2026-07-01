@@ -36,7 +36,7 @@ export function PracticeSetupScreen() {
 
   function startSession() {
     if (selected === "quick") {
-      navigation.navigate("Main", { screen: "PracticeTab", params: { packId: effectivePackId, restartAt: Date.now() } });
+      navigation.navigate("PracticeHub", { packId: effectivePackId, restartAt: Date.now() });
       return;
     }
     const activityType = selected === "review" ? "multiple_choice" : "spelling";

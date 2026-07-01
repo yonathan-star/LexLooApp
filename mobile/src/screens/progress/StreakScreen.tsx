@@ -38,7 +38,7 @@ export function StreakScreen() {
       primaryLabel="Scan Tile"
       secondaryLabel="Practice"
       onPrimary={() => navigation.navigate("ScannerTab")}
-      onSecondary={() => navigation.navigate("PracticeTab")}
+      onSecondary={() => navigation.navigate("PracticeHub")}
     />
   );
 }

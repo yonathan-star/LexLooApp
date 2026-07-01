@@ -75,7 +75,7 @@ export function HomeScreen() {
               </Pressable>
             </View>
             <Text style={styles.definition}>Lasting for a very short time; transient or momentary.</Text>
-            <Pressable style={styles.primaryButton} onPress={() => navigation.navigate("PracticeTab")}>
+            <Pressable style={styles.primaryButton} onPress={() => navigation.navigate("PracticeHub")}>
               <Text style={styles.primaryIcon}>◌</Text>
               <Text style={styles.primaryButtonText}>Practice Now</Text>
             </Pressable>

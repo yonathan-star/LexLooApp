@@ -49,7 +49,7 @@ export async function scheduleLearningReminders() {
   await replaceScheduledNotification(DAILY_WORD_ID_KEY, {
     content: {
       title: "Your LexLoo word is ready",
-      body: "Scan a tile or practice your word of the day to keep the loop moving.",
+      body: "Your daily word takes less than a minute.",
       data: { route: "HomeTab", kind: "daily_word" },
     },
     trigger: dailyTrigger(9),
@@ -58,8 +58,8 @@ export async function scheduleLearningReminders() {
   await replaceScheduledNotification(STREAK_ID_KEY, {
     content: {
       title: "Keep your LexLoo streak",
-      body: "A quick scan or practice session keeps today's learning streak alive.",
-      data: { route: "PracticeTab", kind: "streak" },
+      body: "A quick practice session keeps today's learning streak alive.",
+      data: { route: "PracticeHub", kind: "streak" },
     },
     trigger: dailyTrigger(18),
   });

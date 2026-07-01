@@ -33,7 +33,7 @@ export function XpLedgerScreen() {
       }))}
       primaryLabel="Practice Now"
       secondaryLabel="Back"
-      onPrimary={() => navigation.navigate("PracticeTab")}
+      onPrimary={() => navigation.navigate("PracticeHub")}
       onSecondary={() => navigation.goBack()}
     />
   );

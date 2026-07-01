@@ -158,7 +158,7 @@ export function HomeScreen() {
 
             <Pressable
               style={styles.primaryButton}
-              onPress={() => (dailyWord ? navigation.navigate("WordDetail", { wordId: dailyWord.id }) : navigation.navigate("PracticeTab"))}
+              onPress={() => (dailyWord ? navigation.navigate("WordDetail", { wordId: dailyWord.id }) : navigation.navigate("PracticeHub"))}
             >
               <Ionicons name="school-outline" size={18} color={colors.white} />
               <Text style={styles.primaryButtonText}>{dailyWord ? "Practice Now" : "Choose a Pack"}</Text>

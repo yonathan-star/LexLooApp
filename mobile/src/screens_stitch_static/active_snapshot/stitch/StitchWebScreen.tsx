@@ -48,8 +48,8 @@ export function StitchWebScreen({ uri, onAction }: StitchWebScreenProps) {
     if (!label) return;
     if (label.includes("Home")) navigation.navigate("HomeTab");
     else if (label.includes("Scan")) navigation.navigate("ScannerTab");
-    else if (label.includes("Practice")) navigation.navigate("PracticeTab");
-    else if (label.includes("Progress")) navigation.navigate("ProgressTab");
+    else if (label.includes("Practice")) navigation.navigate("PracticeHub");
+    else if (label.includes("Progress")) navigation.navigate("LexWorldTab");
     else if (label.includes("Settings")) navigation.navigate("Settings");
     else if (label.includes("Notifications")) navigation.navigate("NotificationsSettings");
     else if (label.includes("Help")) navigation.navigate("HelpCenter");

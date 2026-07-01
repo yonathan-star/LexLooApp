@@ -13,6 +13,7 @@ import { MainTabs } from "./MainTabs";
 
 import { ManualCodeEntryScreen } from "../screens/scanner/ManualCodeEntryScreen";
 import { WordDetailScreen } from "../screens/word/WordDetailScreen";
+import { PracticeHubScreen } from "../screens/practice/PracticeHubScreen";
 import { PracticeSetupScreen } from "../screens/practice/PracticeSetupScreen";
 import { PracticeSessionScreen } from "../screens/practice/PracticeSessionScreen";
 import { PracticeResultsScreen } from "../screens/practice/PracticeResultsScreen";
@@ -79,6 +80,7 @@ function SharedScreenList() {
     <>
       <Stack.Screen name="ManualCodeEntry" component={ManualCodeEntryScreen} options={{ title: "Enter Code" }} />
       <Stack.Screen name="WordDetail" component={WordDetailScreen} options={{ title: "" }} />
+      <Stack.Screen name="PracticeHub" component={PracticeHubScreen} options={{ title: "Practice" }} />
       <Stack.Screen name="PracticeSetup" component={PracticeSetupScreen} options={{ title: "Practice Setup" }} />
       <Stack.Screen name="PracticeSession" component={PracticeSessionScreen} options={{ title: "Practice" }} />
       <Stack.Screen name="PracticeResults" component={PracticeResultsScreen} options={{ title: "Results", headerBackVisible: false }} />

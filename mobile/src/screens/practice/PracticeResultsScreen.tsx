@@ -35,15 +35,15 @@ export function PracticeResultsScreen() {
   function practiceAgain() {
     haptics.tap();
     if (activityType === "flashcard") {
-      // The swipeable flashcard hub lives on the Practice tab and starts a
-      // fresh session when the tab gets a new restart token.
-      navigation.navigate("Main", { screen: "PracticeTab", params: { restartAt: Date.now(), packId } });
+      // The swipeable flashcard hub starts a fresh session when it gets a
+      // new restart token.
+      navigation.navigate("PracticeHub", { restartAt: Date.now(), packId });
     } else if (activityType === "sentence_builder") {
       navigation.navigate("SentenceBuilder", { wordId });
     } else if (activityType) {
       navigation.navigate("PracticeSession", { activityType, packId, wordId });
     } else {
-      navigation.navigate("Main", { screen: "PracticeTab" });
+      navigation.navigate("PracticeHub");
     }
   }
 
