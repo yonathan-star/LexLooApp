@@ -181,20 +181,44 @@ authRouter.get("/me", requireAuth, async (req, res) => {
 authRouter.delete("/me", requireAuth, async (req, res) => {
   const user = await prisma.user.findUnique({ where: { id: req.auth!.userId } });
   if (!user) return fail(res, 404, "Account not found");
+  const profiles = await prisma.profile.findMany({ where: { userId: user.id }, select: { id: true } });
+  const profileIds = profiles.map((profile) => profile.id);
 
-  await prisma.notification.updateMany({
-    where: { profile: { userId: user.id }, status: "scheduled" },
-    data: { status: "cancelled" },
-  });
-
-  await prisma.user.update({
-    where: { id: user.id },
-    data: {
-      status: "deleted",
-      email: `deleted-${user.id}@lexloo.local`,
-      displayName: "Deleted Account",
-      lastLoginAt: new Date(),
-    },
+  await prisma.$transaction(async (tx) => {
+    await tx.notification.updateMany({
+      where: { profileId: { in: profileIds }, status: "scheduled" },
+      data: { status: "cancelled" },
+    });
+    await tx.familyInvite.deleteMany({
+      where: { OR: [{ parentUserId: user.id }, { childProfileId: { in: profileIds } }] },
+    });
+    await tx.parentChildLink.deleteMany({
+      where: { OR: [{ parentUserId: user.id }, { childProfileId: { in: profileIds } }] },
+    });
+    await tx.profile.updateMany({
+      where: { userId: user.id },
+      data: {
+        name: "Deleted Profile",
+        ageRange: null,
+        gradeLevel: null,
+        avatar: null,
+        activeGoalId: null,
+      },
+    });
+    await tx.user.update({
+      where: { id: user.id },
+      data: {
+        status: "deleted",
+        email: `deleted-${user.id}@lexloo.local`,
+        displayName: "Deleted Account",
+        mfaPhone: null,
+        mfaPendingPhone: null,
+        mfaCodeHash: null,
+        mfaCodeExpiresAt: null,
+        mfaChallengeId: null,
+        lastLoginAt: new Date(),
+      },
+    });
   });
   await trackEvent("account_deleted", { userId: user.id, properties: {} });
 
