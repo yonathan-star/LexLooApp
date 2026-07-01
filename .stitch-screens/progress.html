@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>LexLoo Progress Dashboard</title>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-dim": "#dcd9d8",
+                        "secondary-fixed-dim": "#ffb68d",
+                        "surface": "#fcf9f8",
+                        "on-secondary-fixed": "#321200",
+                        "on-tertiary": "#ffffff",
+                        "secondary": "#9a4600",
+                        "background": "#fcf9f8",
+                        "tertiary-fixed": "#e2e2e2",
+                        "on-surface": "#1b1c1b",
+                        "surface-variant": "#e4e2e1",
+                        "surface-tint": "#0053da",
+                        "on-primary-fixed": "#00174b",
+                        "surface-container-low": "#f6f3f2",
+                        "surface-bright": "#fcf9f8",
+                        "on-secondary": "#ffffff",
+                        "inverse-on-surface": "#f3f0ef",
+                        "on-secondary-fixed-variant": "#763300",
+                        "on-secondary-container": "#672c00",
+                        "on-error": "#ffffff",
+                        "error-container": "#ffdad6",
+                        "outline": "#737687",
+                        "primary": "#0051d5",
+                        "on-error-container": "#93000a",
+                        "inverse-primary": "#b4c5ff",
+                        "surface-container-highest": "#e4e2e1",
+                        "tertiary-container": "#737575",
+                        "secondary-container": "#fe893c",
+                        "primary-fixed-dim": "#b4c5ff",
+                        "primary-fixed": "#dbe1ff",
+                        "surface-container-lowest": "#ffffff",
+                        "outline-variant": "#c3c6d8",
+                        "on-tertiary-container": "#fcfcfc",
+                        "surface-container-high": "#eae7e7",
+                        "on-primary-fixed-variant": "#003ea7",
+                        "on-surface-variant": "#424655",
+                        "inverse-surface": "#303030",
+                        "secondary-fixed": "#ffdbc9",
+                        "on-background": "#1b1c1b",
+                        "on-tertiary-fixed-variant": "#454747",
+                        "tertiary-fixed-dim": "#c6c6c7",
+                        "on-tertiary-fixed": "#1a1c1c",
+                        "error": "#ba1a1a",
+                        "surface-container": "#f0edec",
+                        "primary-container": "#276afa",
+                        "on-primary-container": "#fefcff",
+                        "on-primary": "#ffffff",
+                        "tertiary": "#5a5c5c"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "margin-mobile": "20px",
+                        "xs": "4px",
+                        "lg": "32px",
+                        "sm": "12px",
+                        "md": "20px",
+                        "gutter-mobile": "12px",
+                        "xl": "48px",
+                        "base": "8px"
+                    },
+                    "fontFamily": {
+                        "label-bold": ["Sora"],
+                        "body-md": ["Sora"],
+                        "body-lg": ["Sora"],
+                        "headline-md": ["Sora"],
+                        "headline-sm": ["Sora"],
+                        "display-lg": ["Sora"],
+                        "label-sm": ["Sora"]
+                    },
+                    "fontSize": {
+                        "label-bold": ["12px", {"lineHeight": "1", "letterSpacing": "0.02em", "fontWeight": "700"}],
+                        "body-md": ["14px", {"lineHeight": "1.5", "fontWeight": "400"}],
+                        "body-lg": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                        "headline-md": ["24px", {"lineHeight": "1.3", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                        "headline-sm": ["20px", {"lineHeight": "1.4", "fontWeight": "600"}],
+                        "display-lg": ["32px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "label-sm": ["11px", {"lineHeight": "1", "fontWeight": "500"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        body { font-family: 'Sora', sans-serif; -webkit-font-smoothing: antialiased; }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            box-shadow: 0 4px 20px -2px rgba(154, 70, 0, 0.05);
+        }
+        .progress-ring-track { stroke: #f0edec; }
+        .progress-ring-fill { 
+            stroke: #0051d5; 
+            stroke-linecap: round;
+            transition: stroke-dashoffset 1s ease-in-out;
+        }
+        .shimmer {
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            background-size: 200% 100%;
+            animation: shimmer 2s infinite;
+        }
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface text-on-surface min-h-screen pb-32">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 bg-surface/70 dark:bg-surface-container-low/70 backdrop-blur-xl border-b border-white/40 shadow-sm shadow-secondary/5">
+<div class="flex justify-between items-center px-margin-mobile py-4 max-w-7xl mx-auto">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full overflow-hidden bg-primary-fixed border-2 border-white shadow-sm">
+<img class="w-full h-full object-cover" data-alt="A high-end cinematic profile avatar of a diverse, stylish young learner in a brightly lit studio setting with soft ambient blue highlights. The background is a minimalist frosted glass pane, maintaining a clean wellness-oriented aesthetic. The lighting is flattering and professional, matching a premium educational app interface." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAZ0uDFYU2fFeiTgBwrbGJ5HUXHsH-iQkLAREYfrSg9hsJzozhscggrJ8EzDCnoTRHw7Tr2mil54qf-zXr9khvXwby6lcAaKW1BNz7zV65nDFJz4649c7l_LvbgD5mUQo3Q86it2bzS7vp_dOBd1vHrM_blul7__5AtZ2pRyYOlPX0lXva1y4tc-OarsNjXYuTQEk3-yX9n_jfqLn1Ow0plneVxm--r4oCCJW-K7VkTLoxAMCjnqE1rOxPpuWOmw8tj_utCTbeU3t0P"/>
+</div>
+<h1 class="font-display-lg text-display-lg text-primary tracking-tight">LexLoo</h1>
+</div>
+<div class="bg-secondary-fixed-dim/20 px-3 py-1.5 rounded-full flex items-center gap-2">
+<span class="text-label-bold font-label-bold text-secondary">🔥 12 Streak • 1.2k XP</span>
+</div>
+</div>
+</header>
+<main class="pt-24 px-margin-mobile max-w-2xl mx-auto space-y-lg">
+<!-- Quick Stats Bento -->
+<section class="grid grid-cols-3 gap-md">
+<div class="glass-card rounded-2xl p-4 flex flex-col items-center text-center">
+<span class="text-primary text-label-bold font-label-bold mb-1">Scanned</span>
+<span class="text-headline-md font-headline-md">1,250</span>
+</div>
+<div class="glass-card rounded-2xl p-4 flex flex-col items-center text-center">
+<span class="text-secondary text-label-bold font-label-bold mb-1">Learned</span>
+<span class="text-headline-md font-headline-md">842</span>
+</div>
+<div class="glass-card rounded-2xl p-4 flex flex-col items-center text-center">
+<span class="text-tertiary text-label-bold font-label-bold mb-1">Mastered</span>
+<span class="text-headline-md font-headline-md">318</span>
+</div>
+</section>
+<!-- Current Rank Card -->
+<section class="relative">
+<div class="glass-card rounded-[2rem] p-lg overflow-hidden relative border-primary/10">
+<!-- Background Decoration -->
+<div class="absolute -top-12 -right-12 w-48 h-48 bg-primary/5 rounded-full blur-3xl"></div>
+<div class="flex flex-col md:flex-row items-center gap-md relative z-10">
+<div class="relative w-32 h-32 flex items-center justify-center">
+<svg class="w-full h-full transform -rotate-90">
+<circle class="text-surface-container" cx="64" cy="64" fill="transparent" r="58" stroke="currentColor" stroke-width="8"></circle>
+<circle class="text-primary stroke-round" cx="64" cy="64" fill="transparent" r="58" stroke="currentColor" stroke-dasharray="364.4" stroke-dashoffset="91.1" stroke-width="8"></circle>
+</svg>
+<div class="absolute inset-0 flex items-center justify-center">
+<span class="material-symbols-outlined text-display-lg text-primary" style="font-variation-settings: 'FILL' 1;">workspace_premium</span>
+</div>
+</div>
+<div class="flex-1 text-center md:text-left">
+<h2 class="font-headline-md text-headline-md mb-1">Wordsmith</h2>
+<p class="font-body-md text-body-md text-on-surface-variant mb-4">Rank 4 of 10 • Path to Legend</p>
+<div class="w-full bg-surface-container rounded-full h-3 mb-2 relative overflow-hidden">
+<div class="h-full bg-primary rounded-full transition-all duration-1000 w-[73%] relative">
+<div class="absolute top-0 right-0 h-full w-full shimmer"></div>
+</div>
+</div>
+<div class="flex justify-between font-label-bold text-label-bold">
+<span class="text-primary">1,840 XP</span>
+<span class="text-on-surface-variant">2,500 XP</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Learning Ladder -->
+<section class="space-y-md">
+<h3 class="font-headline-sm text-headline-sm px-1">Learning Ladder</h3>
+<div class="space-y-4">
+<!-- Legend (Locked) -->
+<div class="flex items-center gap-md opacity-40 grayscale">
+<div class="w-12 h-12 flex flex-col items-center">
+<div class="w-1 h-8 bg-surface-container rounded-full mb-1"></div>
+<div class="w-10 h-10 rounded-full border-2 border-surface-container flex items-center justify-center">
+<span class="material-symbols-outlined text-on-surface-variant">lock</span>
+</div>
+</div>
+<div class="flex-1 glass-card rounded-2xl p-4">
+<p class="font-label-bold text-label-bold">LexLoo Legend</p>
+</div>
+</div>
+<!-- Active Step -->
+<div class="flex items-center gap-md">
+<div class="w-12 h-12 flex flex-col items-center">
+<div class="w-1 h-8 bg-primary rounded-full mb-1"></div>
+<div class="w-10 h-10 rounded-full bg-primary-container text-on-primary-container flex items-center justify-center shadow-lg shadow-primary/20">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
+</div>
+<div class="w-1 h-8 bg-primary rounded-full mt-1"></div>
+</div>
+<div class="flex-1 glass-card border-primary/20 rounded-2xl p-4 ring-2 ring-primary/10">
+<div class="flex justify-between items-center">
+<p class="font-label-bold text-label-bold text-primary">Wordsmith (Current)</p>
+<span class="bg-primary/10 text-primary text-label-sm font-label-bold px-2 py-0.5 rounded-full">Active</span>
+</div>
+</div>
+</div>
+<!-- Completed Step -->
+<div class="flex items-center gap-md">
+<div class="w-12 h-12 flex flex-col items-center">
+<div class="w-1 h-8 bg-primary rounded-full mb-1"></div>
+<div class="w-10 h-10 rounded-full bg-secondary-fixed-dim text-on-secondary-fixed flex items-center justify-center">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+<div class="w-1 h-8 bg-primary rounded-full mt-1"></div>
+</div>
+<div class="flex-1 glass-card rounded-2xl p-4">
+<p class="font-label-bold text-label-bold">Explorer</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Module Progress -->
+<section class="space-y-md">
+<div class="flex justify-between items-center px-1">
+<h3 class="font-headline-sm text-headline-sm">Module Progress</h3>
+<button class="text-primary font-label-bold text-label-bold hover:opacity-80 transition-opacity">See All</button>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-md">
+<!-- Culinary -->
+<div class="glass-card rounded-2xl p-md">
+<div class="flex items-center gap-3 mb-4">
+<div class="w-10 h-10 rounded-xl bg-secondary-container/20 flex items-center justify-center">
+<span class="material-symbols-outlined text-secondary">restaurant</span>
+</div>
+<div>
+<p class="font-label-bold text-label-bold">Culinary</p>
+<p class="text-label-sm font-label-sm text-on-surface-variant">85% Complete</p>
+</div>
+</div>
+<div class="w-full bg-surface-container rounded-full h-2">
+<div class="h-full bg-secondary rounded-full w-[85%]"></div>
+</div>
+</div>
+<!-- Travel -->
+<div class="glass-card rounded-2xl p-md">
+<div class="flex items-center gap-3 mb-4">
+<div class="w-10 h-10 rounded-xl bg-primary-container/20 flex items-center justify-center">
+<span class="material-symbols-outlined text-primary">flight</span>
+</div>
+<div>
+<p class="font-label-bold text-label-bold">Travel</p>
+<p class="text-label-sm font-label-sm text-on-surface-variant">42% Complete</p>
+</div>
+</div>
+<div class="w-full bg-surface-container rounded-full h-2">
+<div class="h-full bg-primary rounded-full w-[42%]"></div>
+</div>
+</div>
+<!-- Nature -->
+<div class="glass-card rounded-2xl p-md">
+<div class="flex items-center gap-3 mb-4">
+<div class="w-10 h-10 rounded-xl bg-surface-dim/30 flex items-center justify-center">
+<span class="material-symbols-outlined text-tertiary">forest</span>
+</div>
+<div>
+<p class="font-label-bold text-label-bold">Nature</p>
+<p class="text-label-sm font-label-sm text-on-surface-variant">12% Complete</p>
+</div>
+</div>
+<div class="w-full bg-surface-container rounded-full h-2">
+<div class="h-full bg-tertiary rounded-full w-[12%]"></div>
+</div>
+</div>
+<!-- Daily Phrases -->
+<div class="glass-card rounded-2xl p-md">
+<div class="flex items-center gap-3 mb-4">
+<div class="w-10 h-10 rounded-xl bg-primary-container/20 flex items-center justify-center">
+<span class="material-symbols-outlined text-primary">forum</span>
+</div>
+<div>
+<p class="font-label-bold text-label-bold">Daily Phrases</p>
+<p class="text-label-sm font-label-sm text-on-surface-variant">68% Complete</p>
+</div>
+</div>
+<div class="w-full bg-surface-container rounded-full h-2">
+<div class="h-full bg-primary rounded-full w-[68%]"></div>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-md left-md right-md rounded-xl z-50 bg-black/85 dark:bg-black/90 backdrop-blur-lg border border-white/10 shadow-xl shadow-black/20 overflow-hidden">
+<div class="flex justify-around items-center h-16 w-full px-4">
+<!-- Home -->
+<button class="flex flex-col items-center justify-center text-on-surface-variant hover:text-surface-bright transition-colors transition-all duration-150 active:scale-90">
+<span class="material-symbols-outlined">home</span>
+<span class="font-label-sm text-label-sm font-label-bold">Home</span>
+</button>
+<!-- Scan -->
+<button class="flex flex-col items-center justify-center text-on-surface-variant hover:text-surface-bright transition-colors transition-all duration-150 active:scale-90">
+<span class="material-symbols-outlined">document_scanner</span>
+<span class="font-label-sm text-label-sm font-label-bold">Scan</span>
+</button>
+<!-- Practice -->
+<button class="flex flex-col items-center justify-center text-on-surface-variant hover:text-surface-bright transition-colors transition-all duration-150 active:scale-90">
+<span class="material-symbols-outlined">exercise</span>
+<span class="font-label-sm text-label-sm font-label-bold">Practice</span>
+</button>
+<!-- Progress (Active) -->
+<button class="flex flex-col items-center justify-center text-primary-fixed-dim bg-white/10 rounded-lg py-1 px-4 transition-all duration-150 active:scale-90">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">analytics</span>
+<span class="font-label-sm text-label-sm font-label-bold">Progress</span>
+</button>
+</div>
+</nav>
+<script>
+        // Simple entry animation for bars
+        document.addEventListener('DOMContentLoaded', () => {
+            const bars = document.querySelectorAll('.h-full.bg-primary, .h-full.bg-secondary, .h-full.bg-tertiary');
+            bars.forEach(bar => {
+                const width = bar.style.width;
+                bar.style.width = '0%';
+                setTimeout(() => {
+                    bar.style.transition = 'width 1s ease-out';
+                    bar.style.width = width;
+                }, 300);
+            });
+        });
+    </script>
+</body></html>

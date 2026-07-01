@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>LexLoo - Welcome</title>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Sora Font -->
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-dim": "#dcd9d8",
+                    "secondary-fixed-dim": "#ffb68d",
+                    "surface": "#fcf9f8",
+                    "on-secondary-fixed": "#321200",
+                    "on-tertiary": "#ffffff",
+                    "secondary": "#9a4600",
+                    "background": "#fcf9f8",
+                    "tertiary-fixed": "#e2e2e2",
+                    "on-surface": "#1b1c1b",
+                    "surface-variant": "#e4e2e1",
+                    "surface-tint": "#0053da",
+                    "on-primary-fixed": "#00174b",
+                    "surface-container-low": "#f6f3f2",
+                    "surface-bright": "#fcf9f8",
+                    "on-secondary": "#ffffff",
+                    "inverse-on-surface": "#f3f0ef",
+                    "on-secondary-fixed-variant": "#763300",
+                    "on-secondary-container": "#672c00",
+                    "on-error": "#ffffff",
+                    "error-container": "#ffdad6",
+                    "outline": "#737687",
+                    "primary": "#0051d5",
+                    "on-error-container": "#93000a",
+                    "inverse-primary": "#b4c5ff",
+                    "surface-container-highest": "#e4e2e1",
+                    "tertiary-container": "#737575",
+                    "secondary-container": "#fe893c",
+                    "primary-fixed-dim": "#b4c5ff",
+                    "primary-fixed": "#dbe1ff",
+                    "surface-container-lowest": "#ffffff",
+                    "outline-variant": "#c3c6d8",
+                    "on-tertiary-container": "#fcfcfc",
+                    "surface-container-high": "#eae7e7",
+                    "on-primary-fixed-variant": "#003ea7",
+                    "on-surface-variant": "#424655",
+                    "inverse-surface": "#303030",
+                    "secondary-fixed": "#ffdbc9",
+                    "on-background": "#1b1c1b",
+                    "on-tertiary-fixed-variant": "#454747",
+                    "tertiary-fixed-dim": "#c6c6c7",
+                    "on-tertiary-fixed": "#1a1c1c",
+                    "error": "#ba1a1a",
+                    "surface-container": "#f0edec",
+                    "primary-container": "#276afa",
+                    "on-primary-container": "#fefcff",
+                    "on-primary": "#ffffff",
+                    "tertiary": "#5a5c5c"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "margin-mobile": "20px",
+                    "xs": "4px",
+                    "lg": "32px",
+                    "sm": "12px",
+                    "md": "20px",
+                    "gutter-mobile": "12px",
+                    "xl": "48px",
+                    "base": "8px"
+            },
+            "fontFamily": {
+                    "label-bold": ["Sora"],
+                    "body-md": ["Sora"],
+                    "body-lg": ["Sora"],
+                    "headline-md": ["Sora"],
+                    "headline-sm": ["Sora"],
+                    "display-lg": ["Sora"],
+                    "label-sm": ["Sora"]
+            },
+            "fontSize": {
+                    "label-bold": ["12px", {"lineHeight": "1", "letterSpacing": "0.02em", "fontWeight": "700"}],
+                    "body-md": ["14px", {"lineHeight": "1.5", "fontWeight": "400"}],
+                    "body-lg": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                    "headline-md": ["24px", {"lineHeight": "1.3", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                    "headline-sm": ["20px", {"lineHeight": "1.4", "fontWeight": "600"}],
+                    "display-lg": ["32px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "label-sm": ["11px", {"lineHeight": "1", "fontWeight": "500"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body {
+            background-color: #fcf9f8;
+            font-family: 'Sora', sans-serif;
+            overflow-x: hidden;
+        }
+        
+        .glass-card {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+        }
+
+        .gradient-text {
+            background: linear-gradient(135deg, #0051d5 0%, #276afa 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .step-active {
+            width: 32px;
+            background-color: #0051d5;
+        }
+
+        .step-inactive {
+            width: 8px;
+            background-color: #dcd9d8;
+        }
+
+        .hero-mask {
+            mask-image: linear-gradient(to bottom, black 70%, transparent 100%);
+            -webkit-mask-image: linear-gradient(to bottom, black 70%, transparent 100%);
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+
+        .animate-float {
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="antialiased text-on-surface">
+<!-- Top Navigation Anchor (Simulated Shell for Welcome Flow) -->
+<header class="fixed top-0 w-full z-50 flex justify-between items-center px-margin-mobile py-6 bg-surface/70 backdrop-blur-xl">
+<h1 class="font-display-lg text-display-lg text-primary tracking-tight">LexLoo</h1>
+<div class="flex items-center gap-4">
+<span class="font-label-bold text-label-bold text-on-surface-variant uppercase tracking-widest">EN</span>
+</div>
+</header>
+<main class="relative min-h-screen pt-24 pb-32 flex flex-col items-center">
+<!-- Hero Section -->
+<div class="relative w-full max-w-md px-margin-mobile flex flex-col items-center text-center">
+<!-- Animated Background Glow -->
+<div class="absolute top-0 left-1/2 -translate-x-1/2 w-[300px] h-[300px] bg-primary/5 rounded-full blur-[80px] -z-10"></div>
+<!-- Product Showcase Area -->
+<div class="relative w-full aspect-square mb-lg flex items-center justify-center">
+<div class="absolute inset-0 flex items-center justify-center">
+<div class="w-72 h-72 rounded-full border border-primary/10 animate-pulse"></div>
+</div>
+<div class="absolute inset-0 flex items-center justify-center rotate-45">
+<div class="w-64 h-64 rounded-full border border-secondary/5"></div>
+</div>
+<!-- Main Product Image -->
+<div class="relative z-10 animate-float">
+<div class="w-64 h-64 rounded-full overflow-hidden glass-card shadow-xl shadow-primary/5 flex items-center justify-center">
+<img class="w-full h-full object-cover" data-alt="A macro studio photograph of a premium, minimalist titanium smart ring with a sleek matte finish, resting on a soft velvet surface. The lighting is ethereal and high-key, using soft warm neutrals and electric blue accents to highlight the polished edges and sophisticated texture of the wearable device. The composition is clean, centered, and embodies a luxurious high-fidelity wellness aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCOPg7v8Qz0hbl233_IC53JqTe7NbN6FwaO6CI9J6-sAFtzV_KN-hyCdU_4IucBv2Ut_mQxD6OVDKX9z4uM2dAAAOMTJaSY04s1EXkwbYA0dYU8-72JmxXUrcMkgnHQLEbxW46v3xvMtlKYw--zaMtXoUQ3QeySqjP0v8Sm6tAYzZ9YtQA9LWv4TyeGB8cEc69jRqRNVeykLjqwL2loX6aLwSqGZI09DbV1T-mFPgXpGDhSHxwHuQ4H-PVPUrVUoQ-gZDQYeJ6HeVw5"/>
+</div>
+<!-- Floating Data Pill -->
+<div class="absolute -top-4 -right-2 glass-card rounded-full px-4 py-2 flex items-center gap-2 shadow-lg">
+<span class="material-symbols-outlined text-primary text-[18px]">auto_awesome</span>
+<span class="font-label-bold text-label-bold text-primary">AI Decoded</span>
+</div>
+</div>
+</div>
+<!-- Tagline & Headline -->
+<div class="space-y-4 mb-xl">
+<span class="inline-block px-4 py-1.5 rounded-full bg-primary/10 text-primary font-label-bold text-label-bold tracking-wider">PREMIUM WEARABLE LEARNING</span>
+<h2 class="font-display-lg text-display-lg text-on-surface leading-tight px-4">Learn. Wear. Master.</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-[280px] mx-auto">Master new languages naturally through the rhythm of your day.</p>
+</div>
+<!-- Three-Step Visual Walkthrough -->
+<div class="grid grid-cols-1 gap-md w-full text-left">
+<!-- Step 1 -->
+<div class="glass-card p-md rounded-xl flex items-center gap-md group hover:bg-white/90 transition-all duration-300 transform active:scale-95">
+<div class="w-12 h-12 rounded-lg bg-surface-container-high flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-primary text-[28px]">ring_volume</span>
+</div>
+<div>
+<h4 class="font-headline-sm text-headline-sm text-on-surface">Choose your ring</h4>
+<p class="font-body-md text-body-md text-on-surface-variant">Sizing kit delivered to your doorstep.</p>
+</div>
+</div>
+<!-- Step 2 -->
+<div class="glass-card p-md rounded-xl flex items-center gap-md group hover:bg-white/90 transition-all duration-300 transform active:scale-95">
+<div class="w-12 h-12 rounded-lg bg-surface-container-high flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-primary text-[28px]">watch_button_press</span>
+</div>
+<div>
+<h4 class="font-headline-sm text-headline-sm text-on-surface">Wear it daily</h4>
+<p class="font-body-md text-body-md text-on-surface-variant">Lightweight, waterproof, and zero charging.</p>
+</div>
+</div>
+<!-- Step 3 -->
+<div class="glass-card p-md rounded-xl flex items-center gap-md group hover:bg-white/90 transition-all duration-300 transform active:scale-95">
+<div class="w-12 h-12 rounded-lg bg-surface-container-high flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-primary text-[28px]">translate</span>
+</div>
+<div>
+<h4 class="font-headline-sm text-headline-sm text-on-surface">Master new words</h4>
+<p class="font-body-md text-body-md text-on-surface-variant">Contextual learning via haptic feedback.</p>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Bottom Action Shell -->
+<div class="fixed bottom-0 left-0 right-0 p-margin-mobile z-50">
+<div class="max-w-md mx-auto space-y-6">
+<!-- Progress Indicators -->
+<div class="flex justify-center items-center gap-2">
+<div class="step-active h-1.5 rounded-full transition-all duration-500"></div>
+<div class="step-inactive h-1.5 rounded-full"></div>
+<div class="step-inactive h-1.5 rounded-full"></div>
+</div>
+<!-- Primary Action -->
+<button class="w-full h-16 bg-primary text-on-primary rounded-xl font-label-bold text-body-lg flex items-center justify-center gap-3 shadow-xl shadow-primary/20 hover:opacity-90 active:scale-95 transition-all duration-200">
+<span>Get Started</span>
+<span class="material-symbols-outlined">arrow_forward</span>
+</button>
+<!-- Secondary Action -->
+<button class="w-full py-4 text-on-surface-variant font-label-bold text-label-bold uppercase tracking-widest text-center hover:text-primary transition-colors">
+                Already have a ring? Sign in
+            </button>
+</div>
+<!-- Bottom Safe Area Backdrop -->
+<div class="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-surface via-surface/80 to-transparent -z-10"></div>
+</div>
+<!-- Micro-interaction Script -->
+<script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const steps = document.querySelectorAll('.glass-card');
+            
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach((entry, index) => {
+                    if (entry.isIntersecting) {
+                        setTimeout(() => {
+                            entry.target.style.opacity = '1';
+                            entry.target.style.transform = 'translateY(0)';
+                        }, index * 100);
+                    }
+                });
+            }, observerOptions);
+
+            steps.forEach(step => {
+                step.style.opacity = '0';
+                step.style.transform = 'translateY(20px)';
+                step.style.transition = 'all 0.6s cubic-bezier(0.23, 1, 0.32, 1)';
+                observer.observe(step);
+            });
+        });
+    </script>
+</body></html>

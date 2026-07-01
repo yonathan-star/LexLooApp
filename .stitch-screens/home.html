@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>LexLoo Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-dim": "#dcd9d8",
+                    "secondary-fixed-dim": "#ffb68d",
+                    "surface": "#fcf9f8",
+                    "on-secondary-fixed": "#321200",
+                    "on-tertiary": "#ffffff",
+                    "secondary": "#9a4600",
+                    "background": "#fcf9f8",
+                    "tertiary-fixed": "#e2e2e2",
+                    "on-surface": "#1b1c1b",
+                    "surface-variant": "#e4e2e1",
+                    "surface-tint": "#0053da",
+                    "on-primary-fixed": "#00174b",
+                    "surface-container-low": "#f6f3f2",
+                    "surface-bright": "#fcf9f8",
+                    "on-secondary": "#ffffff",
+                    "inverse-on-surface": "#f3f0ef",
+                    "on-secondary-fixed-variant": "#763300",
+                    "on-secondary-container": "#672c00",
+                    "on-error": "#ffffff",
+                    "error-container": "#ffdad6",
+                    "outline": "#737687",
+                    "primary": "#0051d5",
+                    "on-error-container": "#93000a",
+                    "inverse-primary": "#b4c5ff",
+                    "surface-container-highest": "#e4e2e1",
+                    "tertiary-container": "#737575",
+                    "secondary-container": "#fe893c",
+                    "primary-fixed-dim": "#b4c5ff",
+                    "primary-fixed": "#dbe1ff",
+                    "surface-container-lowest": "#ffffff",
+                    "outline-variant": "#c3c6d8",
+                    "on-tertiary-container": "#fcfcfc",
+                    "surface-container-high": "#eae7e7",
+                    "on-primary-fixed-variant": "#003ea7",
+                    "on-surface-variant": "#424655",
+                    "inverse-surface": "#303030",
+                    "secondary-fixed": "#ffdbc9",
+                    "on-background": "#1b1c1b",
+                    "on-tertiary-fixed-variant": "#454747",
+                    "tertiary-fixed-dim": "#c6c6c7",
+                    "on-tertiary-fixed": "#1a1c1c",
+                    "error": "#ba1a1a",
+                    "surface-container": "#f0edec",
+                    "primary-container": "#276afa",
+                    "on-primary-container": "#fefcff",
+                    "on-primary": "#ffffff",
+                    "tertiary": "#5a5c5c"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "margin-mobile": "20px",
+                    "xs": "4px",
+                    "lg": "32px",
+                    "sm": "12px",
+                    "md": "20px",
+                    "gutter-mobile": "12px",
+                    "xl": "48px",
+                    "base": "8px"
+            },
+            "fontFamily": {
+                    "label-bold": ["Sora"],
+                    "body-md": ["Sora"],
+                    "body-lg": ["Sora"],
+                    "headline-md": ["Sora"],
+                    "headline-sm": ["Sora"],
+                    "display-lg": ["Sora"],
+                    "label-sm": ["Sora"]
+            },
+            "fontSize": {
+                    "label-bold": ["12px", {"lineHeight": "1", "letterSpacing": "0.02em", "fontWeight": "700"}],
+                    "body-md": ["14px", {"lineHeight": "1.5", "fontWeight": "400"}],
+                    "body-lg": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                    "headline-md": ["24px", {"lineHeight": "1.3", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                    "headline-sm": ["20px", {"lineHeight": "1.4", "fontWeight": "600"}],
+                    "display-lg": ["32px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "label-sm": ["11px", {"lineHeight": "1", "fontWeight": "500"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body {
+            background-color: #fcf9f8;
+            font-family: 'Sora', sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            box-shadow: 0 4px 20px -2px rgba(154, 70, 0, 0.05);
+        }
+        .progress-ring-segment {
+            transition: stroke-dashoffset 0.6s ease-in-out;
+        }
+        .active-scale:active {
+            transform: scale(0.95);
+        }
+        .bottom-nav-active {
+            background: rgba(255, 255, 255, 0.1);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="min-h-screen pb-32">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 bg-surface/70 backdrop-blur-xl border-b border-white/40 shadow-sm shadow-secondary/5">
+<div class="flex justify-between items-center px-margin-mobile py-4 max-w-7xl mx-auto">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-primary-container flex items-center justify-center text-on-primary-container shadow-lg shadow-primary/20">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">person</span>
+</div>
+<div>
+<h1 class="font-display-lg text-headline-sm text-primary tracking-tight leading-none">LexLoo</h1>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Level 12 Explorer</p>
+</div>
+</div>
+<div class="bg-secondary-fixed text-on-secondary-fixed px-3 py-1.5 rounded-full font-label-bold text-label-bold flex items-center gap-1.5">
+                🔥 12 Streak • 1.2k XP
+            </div>
+</div>
+</header>
+<main class="pt-24 px-margin-mobile space-y-md max-w-2xl mx-auto">
+<!-- Dashboard Progress Section -->
+<section class="glass-card rounded-[2rem] p-6 text-center">
+<h2 class="font-headline-sm text-headline-sm text-on-surface mb-6">Dashboard</h2>
+<div class="relative w-64 h-64 mx-auto mb-4 flex items-center justify-center">
+<!-- Segmented Ring Graphic (SVG Implementation) -->
+<svg class="w-full h-full transform -rotate-90" viewbox="0 0 100 100">
+<!-- Background Track -->
+<circle cx="50" cy="50" fill="transparent" r="40" stroke="#f0edec" stroke-dasharray="12 4" stroke-width="8"></circle>
+<!-- Progress (Secondary Orange) -->
+<circle cx="50" cy="50" fill="transparent" r="40" stroke="url(#gradient)" stroke-dasharray="188" stroke-dashoffset="75" stroke-linecap="round" stroke-width="8"></circle>
+<defs>
+<lineargradient id="gradient" x1="0%" x2="100%" y1="0%" y2="0%">
+<stop offset="0%" stop-color="#fe893c"></stop>
+<stop offset="100%" stop-color="#9a4600"></stop>
+</lineargradient>
+</defs>
+</svg>
+<div class="absolute inset-0 flex flex-col items-center justify-center pt-2">
+<span class="material-symbols-outlined text-secondary text-2xl mb-1">bolt</span>
+<p class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">20 Aug</p>
+<h3 class="font-display-lg text-display-lg text-on-surface leading-tight">1250 <span class="text-headline-sm">XP</span></h3>
+<p class="font-label-bold text-label-bold text-secondary">Goal 2000 XP</p>
+</div>
+</div>
+<div class="flex gap-4 mt-8">
+<div class="flex-1 glass-card bg-surface-container-low/50 rounded-2xl py-4 flex flex-col items-center">
+<span class="material-symbols-outlined text-secondary mb-1">local_fire_department</span>
+<p class="font-label-bold text-label-bold text-on-surface">14 Days</p>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Streak</p>
+</div>
+<div class="flex-1 glass-card bg-surface-container-low/50 rounded-2xl py-4 flex flex-col items-center">
+<span class="material-symbols-outlined text-primary mb-1">menu_book</span>
+<p class="font-label-bold text-label-bold text-on-surface">842</p>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Words Mastered</p>
+</div>
+</div>
+</section>
+<!-- Word of the Day -->
+<section>
+<div class="flex justify-between items-center mb-4 px-1">
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Daily Discovery</h3>
+<button class="text-primary font-label-bold text-label-bold">View History</button>
+</div>
+<div class="glass-card rounded-[2rem] overflow-hidden group">
+<div class="relative h-48 w-full overflow-hidden">
+<img class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700" data-alt="A macro cinematic shot of morning dew on a single spiderweb glistening against a soft-focus, golden-hour forest background. The lighting is ethereal and tranquil, using a palette of soft ambers and muted forest greens to convey the feeling of ephemerality. High-fidelity glassmorphism aesthetic with soft focus." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBuKavu_uCFi1AQeMECF-UAlL6wOFF50G28-5knMrctltRMkwCUX1ZuCu6DJ7DAWxNVhra7EpeEFZz9vIyRrRkEiCwKDhptJkwMoXDn986pbjsSuHWvROCygQmHiDam5t1idbumpbwJNrXxAviQc4FeLIDgAJ4MS-tAW9DA3deM4wu8u9uAqDK8Ae995HYckPo8dHu1u156R7qFFCGyZWXJmwcR0PMmNGBlwDX_1DCNCUqJZHX6rDaqiuEy0LkxKY9sW3NMltj7xDpN"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+<div class="absolute bottom-4 left-6">
+<span class="bg-white/20 backdrop-blur-md px-3 py-1 rounded-full text-white font-label-sm text-label-sm border border-white/30 uppercase tracking-widest">Word of the Day</span>
+</div>
+</div>
+<div class="p-6 bg-white">
+<div class="flex justify-between items-start mb-4">
+<div>
+<h4 class="font-display-lg text-display-lg text-on-surface mb-1">Ephemeral</h4>
+<p class="font-body-md text-body-md text-on-surface-variant">/əˈfem(ə)rəl/ • <span class="italic text-primary">adjective</span></p>
+</div>
+<button class="w-12 h-12 rounded-full bg-surface-container-highest flex items-center justify-center text-primary active-scale">
+<span class="material-symbols-outlined">volume_up</span>
+</button>
+</div>
+<p class="font-body-lg text-body-lg text-on-surface-variant mb-6">Lasting for a very short time; transient or momentary.</p>
+<button class="w-full py-4 bg-primary text-on-primary rounded-2xl font-label-bold text-body-lg flex items-center justify-center gap-2 shadow-lg shadow-primary/20 active-scale">
+<span class="material-symbols-outlined text-[20px]">psychology</span>
+                        Practice Now
+                    </button>
+</div>
+</div>
+</section>
+<!-- Daily Missions -->
+<section class="pb-12">
+<h3 class="font-headline-sm text-headline-sm text-on-surface mb-4 px-1">Daily Missions</h3>
+<div class="space-y-3">
+<!-- Mission 1 -->
+<div class="glass-card p-4 rounded-2xl flex items-center gap-4 group">
+<div class="w-12 h-12 rounded-xl bg-secondary-container/20 flex items-center justify-center text-secondary">
+<span class="material-symbols-outlined">document_scanner</span>
+</div>
+<div class="flex-1">
+<h5 class="font-label-bold text-body-md text-on-surface">Scan 5 Environment Items</h5>
+<div class="w-full bg-surface-container-highest h-1.5 rounded-full mt-2 overflow-hidden">
+<div class="bg-secondary h-full rounded-full w-3/5"></div>
+</div>
+</div>
+<div class="text-right">
+<p class="font-label-bold text-label-bold text-on-surface">3/5</p>
+<p class="font-label-sm text-label-sm text-on-surface-variant">+50 XP</p>
+</div>
+</div>
+<!-- Mission 2 -->
+<div class="glass-card p-4 rounded-2xl flex items-center gap-4 group">
+<div class="w-12 h-12 rounded-xl bg-primary-container/10 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined">exercise</span>
+</div>
+<div class="flex-1">
+<h5 class="font-label-bold text-body-md text-on-surface">Master 3 New Words</h5>
+<div class="w-full bg-surface-container-highest h-1.5 rounded-full mt-2 overflow-hidden">
+<div class="bg-primary h-full rounded-full w-1/3"></div>
+</div>
+</div>
+<div class="text-right">
+<p class="font-label-bold text-label-bold text-on-surface">1/3</p>
+<p class="font-label-sm text-label-sm text-on-surface-variant">+120 XP</p>
+</div>
+</div>
+<!-- Mission 3 (Completed) -->
+<div class="glass-card p-4 rounded-2xl flex items-center gap-4 opacity-75">
+<div class="w-12 h-12 rounded-xl bg-green-100 flex items-center justify-center text-green-600">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+<div class="flex-1">
+<h5 class="font-label-bold text-body-md text-on-surface line-through">Listen to 1 Audio Story</h5>
+<div class="w-full bg-green-200 h-1.5 rounded-full mt-2 overflow-hidden">
+<div class="bg-green-500 h-full rounded-full w-full"></div>
+</div>
+</div>
+<div class="text-right">
+<p class="font-label-bold text-label-bold text-green-600">Done</p>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- FAB for Quick Scan -->
+<button class="fixed bottom-24 right-6 w-16 h-16 rounded-full bg-black text-white flex items-center justify-center shadow-2xl z-40 active-scale">
+<span class="material-symbols-outlined text-3xl">center_focus_weak</span>
+</button>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-6 left-6 right-6 rounded-2xl z-50 bg-black/85 backdrop-blur-lg border border-white/10 shadow-xl shadow-black/20">
+<div class="flex justify-around items-center h-16 w-full px-4">
+<!-- Home (Active) -->
+<button class="flex flex-col items-center justify-center text-primary-fixed-dim bg-white/10 rounded-lg py-1 px-4 active-scale">
+<span class="material-symbols-outlined">home</span>
+<span class="font-label-sm text-label-sm font-label-bold mt-0.5">Home</span>
+</button>
+<!-- Scan -->
+<button class="flex flex-col items-center justify-center text-on-surface-variant hover:text-surface-bright transition-colors active-scale">
+<span class="material-symbols-outlined">document_scanner</span>
+<span class="font-label-sm text-label-sm font-label-bold mt-0.5">Scan</span>
+</button>
+<!-- Practice -->
+<button class="flex flex-col items-center justify-center text-on-surface-variant hover:text-surface-bright transition-colors active-scale">
+<span class="material-symbols-outlined">exercise</span>
+<span class="font-label-sm text-label-sm font-label-bold mt-0.5">Practice</span>
+</button>
+<!-- Progress -->
+<button class="flex flex-col items-center justify-center text-on-surface-variant hover:text-surface-bright transition-colors active-scale">
+<span class="material-symbols-outlined">analytics</span>
+<span class="font-label-sm text-label-sm font-label-bold mt-0.5">Progress</span>
+</button>
+</div>
+</nav>
+<script>
+        // Simple entry animation
+        window.addEventListener('DOMContentLoaded', () => {
+            const cards = document.querySelectorAll('.glass-card');
+            cards.forEach((card, index) => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+                card.style.transition = 'all 0.6s cubic-bezier(0.22, 1, 0.36, 1)';
+                setTimeout(() => {
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, 100 + (index * 100));
+            });
+        });
+    </script>
+</body></html>

@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport"/>
+<title>LexLoo | Ethereal</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@100..900&display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "inverse-on-surface": "#f3f0ea",
+                    "surface": "#fcf9f3",
+                    "outline": "#737687",
+                    "on-background": "#1c1c18",
+                    "primary-fixed": "#dbe1ff",
+                    "surface-bright": "#fcf9f3",
+                    "on-secondary-container": "#672c00",
+                    "on-primary-container": "#fefcff",
+                    "on-primary-fixed-variant": "#003ea7",
+                    "surface-variant": "#e5e2dc",
+                    "secondary": "#9a4600",
+                    "tertiary-fixed": "#e5e2e1",
+                    "background": "#fcf9f3",
+                    "on-tertiary-fixed-variant": "#474746",
+                    "on-tertiary-fixed": "#1c1b1b",
+                    "error-container": "#ffdad6",
+                    "on-surface": "#1c1c18",
+                    "inverse-surface": "#31312d",
+                    "on-error": "#ffffff",
+                    "on-primary-fixed": "#00174b",
+                    "tertiary": "#5d5c5b",
+                    "surface-dim": "#dcdad4",
+                    "surface-container": "#f0eee8",
+                    "outline-variant": "#c3c6d8",
+                    "on-surface-variant": "#424655",
+                    "error": "#ba1a1a",
+                    "primary-container": "#276afa",
+                    "surface-container-highest": "#e5e2dc",
+                    "on-tertiary-container": "#f7feff",
+                    "secondary-fixed-dim": "#ffb68d",
+                    "tertiary-container": "#757474",
+                    "secondary-fixed": "#ffdbc9",
+                    "on-secondary": "#ffffff",
+                    "surface-container-lowest": "#ffffff",
+                    "on-secondary-fixed": "#321200",
+                    "on-tertiary": "#ffffff",
+                    "inverse-primary": "#b4c5ff",
+                    "secondary-container": "#fe893c",
+                    "on-primary": "#ffffff",
+                    "primary": "#0051d5",
+                    "surface-container-low": "#f6f3ed",
+                    "on-secondary-fixed-variant": "#763300",
+                    "on-error-container": "#93000a",
+                    "surface-container-high": "#ebe8e2",
+                    "primary-fixed-dim": "#b4c5ff",
+                    "tertiary-fixed-dim": "#c8c6c5",
+                    "surface-tint": "#0053da"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "stack-sm": "8px",
+                    "container-padding-desktop": "40px",
+                    "gutter": "16px",
+                    "stack-md": "16px",
+                    "container-padding-mobile": "20px",
+                    "stack-lg": "32px",
+                    "unit": "4px"
+            },
+            "fontFamily": {
+                    "body-md": ["Plus Jakarta Sans"],
+                    "headline-lg-mobile": ["Plus Jakarta Sans"],
+                    "body-lg": ["Plus Jakarta Sans"],
+                    "headline-md": ["Plus Jakarta Sans"],
+                    "display-lg": ["Plus Jakarta Sans"],
+                    "headline-lg": ["Plus Jakarta Sans"],
+                    "label-lg": ["Plus Jakarta Sans"],
+                    "label-sm": ["Plus Jakarta Sans"]
+            },
+            "fontSize": {
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "headline-lg-mobile": ["28px", {"lineHeight": "36px", "letterSpacing": "-0.01em", "fontWeight": "700"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "display-lg": ["40px", {"lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700"}],
+                    "label-lg": ["14px", {"lineHeight": "20px", "letterSpacing": "0.02em", "fontWeight": "600"}],
+                    "label-sm": ["12px", {"lineHeight": "16px", "fontWeight": "500"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body {
+            background-color: #fcf9f3;
+            color: #1c1c18;
+            -webkit-font-smoothing: antialiased;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .tab-active {
+            background: rgba(0, 81, 213, 0.1);
+            color: #0051d5;
+            border: 1px solid rgba(0, 81, 213, 0.2);
+        }
+    </style>
+</head>
+<body class="font-body-md text-body-md overflow-x-hidden">
+<!-- Top Navigation Anchor -->
+<header class="fixed top-0 w-full z-50 bg-surface/40 backdrop-blur-xl border-b border-white/60 shadow-sm">
+<div class="flex justify-between items-center px-container-padding-mobile h-16 w-full max-w-7xl mx-auto">
+<button class="transition-all duration-300 active:scale-95 text-on-surface-variant">
+<span class="material-symbols-outlined">arrow_back</span>
+</button>
+<h1 class="font-headline-md text-headline-md font-bold text-primary">LexLoo</h1>
+<div class="transition-all duration-300 active:scale-95 px-3 py-1 bg-primary/10 rounded-full">
+<span class="font-label-lg text-label-lg text-primary">🔥 12 | 250 XP</span>
+</div>
+</div>
+</header>
+<main class="pt-16 pb-32 min-h-screen">
+<!-- Hero Word Section -->
+<section class="relative w-full h-[45vh] md:h-[50vh] flex items-center justify-center overflow-hidden">
+<!-- Background Image from JSON with Blur effect -->
+<div class="absolute inset-0 z-0">
+<div class="absolute inset-0 bg-gradient-to-b from-transparent via-surface/20 to-surface z-10"></div>
+<div class="w-full h-full scale-110 blur-2xl opacity-60 transition-transform duration-1000 hover:scale-100" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuD0H9YgeCtSWgwCZZ4FzTC3EDCH406bzYnZe_Xxue8AoKGNG8EQJ9fTcGcjDqD-eVYRBlMlQUEpnfjSTvjwxpXeLqknBiJotVcWbdsTvCNeGR9wZ4fm29Xffcm_z18lxSNhaD5PvpqecVCBMfwTLhDtRX7UNACY6p8fv2UdclLGajOnndcKkxf4P1EC1hMacXGOntgiFlOEafYIYRpCFYWRSHcd7GfYCE8SLgf9shVnhUbeVLFLjXaOvqflGzoVeAJPw-u9rhUioArp'); background-size: cover; background-position: center;">
+</div>
+</div>
+<!-- Foreground Word -->
+<div class="relative z-20 text-center space-y-2 animate-in fade-in slide-in-from-bottom-8 duration-700">
+<span class="font-label-lg text-label-lg text-primary-container tracking-widest uppercase opacity-70">Adjective</span>
+<h2 class="font-display-lg text-display-lg tracking-tight text-on-background">ETHEREAL</h2>
+<div class="flex items-center justify-center gap-2 text-on-surface-variant/80">
+<span class="font-body-md text-body-md italic font-serif">/ɪˈθɪə.ri.əl/</span>
+<button class="w-8 h-8 rounded-full bg-white/40 backdrop-blur-md flex items-center justify-center shadow-sm hover:bg-white/60 transition-all">
+<span class="material-symbols-outlined text-[18px]">volume_up</span>
+</button>
+</div>
+</div>
+</section>
+<!-- Content Canvas -->
+<div class="px-container-padding-mobile max-w-2xl mx-auto -mt-12 relative z-30 space-y-stack-lg">
+<!-- Tabs (Pill Segmented Control) -->
+<div class="glass-card p-1 rounded-full flex items-center justify-between shadow-sm overflow-x-auto custom-scrollbar">
+<button class="tab-active flex-1 py-2 px-4 rounded-full font-label-lg text-label-lg whitespace-nowrap transition-all duration-300">Definition</button>
+<button class="flex-1 py-2 px-4 rounded-full font-label-lg text-label-lg text-on-surface-variant hover:bg-white/40 whitespace-nowrap transition-all duration-300">Translation</button>
+<button class="flex-1 py-2 px-4 rounded-full font-label-lg text-label-lg text-on-surface-variant hover:bg-white/40 whitespace-nowrap transition-all duration-300">Examples</button>
+<button class="flex-1 py-2 px-4 rounded-full font-label-lg text-label-lg text-on-surface-variant hover:bg-white/40 whitespace-nowrap transition-all duration-300">Synonyms</button>
+</div>
+<!-- Definition Card -->
+<div class="glass-card p-6 rounded-[24px] shadow-sm animate-in fade-in duration-1000 delay-200">
+<div class="space-y-stack-md">
+<div class="flex items-start gap-4">
+<div class="w-1.5 h-8 bg-secondary rounded-full mt-1"></div>
+<p class="font-body-lg text-body-lg text-on-surface leading-relaxed">
+                            Extremely delicate and light in a way that seems too perfect for this world.
+                        </p>
+</div>
+<div class="pt-stack-md border-t border-black/5">
+<div class="flex items-center gap-2 mb-2">
+<span class="material-symbols-outlined text-outline text-[20px]">lightbulb</span>
+<h3 class="font-label-lg text-label-lg text-outline uppercase tracking-wider">Usage Note</h3>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant italic">
+                            Often used to describe delicate beauty, music, or spiritual qualities that transcend the physical realm.
+                        </p>
+</div>
+</div>
+</div>
+<!-- Examples Section (Bento Inspired) -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-gutter">
+<div class="glass-card p-5 rounded-[20px] bg-white/20 border-white/40">
+<span class="material-symbols-outlined text-primary mb-2">auto_awesome</span>
+<p class="font-body-md text-body-md text-on-surface">"The sunrise cast an <span class="font-bold text-primary">ethereal</span> glow across the mist-covered valley."</p>
+</div>
+<div class="glass-card p-5 rounded-[20px] bg-white/20 border-white/40">
+<span class="material-symbols-outlined text-primary mb-2">music_note</span>
+<p class="font-body-md text-body-md text-on-surface">"Her voice had an <span class="font-bold text-primary">ethereal</span> quality that brought the audience to tears."</p>
+</div>
+</div>
+<!-- Synonyms (Chip Cluster) -->
+<div class="space-y-stack-sm">
+<h4 class="font-label-lg text-label-lg text-on-surface-variant px-1">Related Nuances</h4>
+<div class="flex flex-wrap gap-2">
+<span class="px-4 py-1.5 bg-surface-container-high rounded-full font-label-lg text-label-lg text-on-surface-variant hover:bg-white transition-colors cursor-pointer">Celestial</span>
+<span class="px-4 py-1.5 bg-surface-container-high rounded-full font-label-lg text-label-lg text-on-surface-variant hover:bg-white transition-colors cursor-pointer">Gossamer</span>
+<span class="px-4 py-1.5 bg-surface-container-high rounded-full font-label-lg text-label-lg text-on-surface-variant hover:bg-white transition-colors cursor-pointer">Incorporeal</span>
+<span class="px-4 py-1.5 bg-surface-container-high rounded-full font-label-lg text-label-lg text-on-surface-variant hover:bg-white transition-colors cursor-pointer">Vaporous</span>
+</div>
+</div>
+</div>
+</main>
+<!-- Bottom Fixed Actions (Not the BottomNavBar, Task-Focused Suppression) -->
+<footer class="fixed bottom-0 w-full z-50 p-container-padding-mobile bg-gradient-to-t from-surface via-surface/90 to-transparent">
+<div class="max-w-2xl mx-auto flex flex-col sm:flex-row gap-3">
+<button class="flex-1 h-14 bg-primary text-on-primary rounded-xl font-label-lg text-label-lg shadow-lg hover:shadow-xl active:scale-[0.98] transition-all duration-200 flex items-center justify-center gap-2">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">exercise</span>
+                Practice Word
+            </button>
+<button class="flex-1 h-14 border-2 border-primary/20 text-primary bg-white/40 backdrop-blur-md rounded-xl font-label-lg text-label-lg hover:bg-white transition-all duration-200 active:scale-[0.98] flex items-center justify-center gap-2">
+<span class="material-symbols-outlined">bookmark</span>
+                Save and Mark Learned
+            </button>
+</div>
+</footer>
+<script>
+        // Micro-interaction for tabs
+        const tabs = document.querySelectorAll('.glass-card button');
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                tabs.forEach(t => t.classList.remove('tab-active', 'text-primary'));
+                tabs.forEach(t => {
+                    if (!t.classList.contains('tab-active')) {
+                        t.classList.add('text-on-surface-variant');
+                    }
+                });
+                tab.classList.add('tab-active');
+                tab.classList.remove('text-on-surface-variant');
+            });
+        });
+
+        // Atmospheric parallax on scroll
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const heroImage = document.querySelector('.scale-110');
+            if (heroImage) {
+                heroImage.style.transform = `translateY(${scrolled * 0.3}px) scale(1.1)`;
+            }
+        });
+    </script>
+</body></html>

@@ -1,0 +1,499 @@
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+// 1. users
+model User {
+  id           String    @id @default(uuid())
+  email        String    @unique
+  passwordHash String
+  displayName  String
+  role         String    @default("student") // student | parent | adult_learner | admin
+  status       String    @default("active")
+  mfaEnabled   Boolean   @default(false)
+  mfaMethod    String?   // email | phone
+  mfaPhone     String?
+  mfaPhoneVerified Boolean @default(false)
+  mfaCodeHash  String?
+  mfaCodeExpiresAt DateTime?
+  mfaChallengeId String?
+  mfaChallengeMethod String?
+  mfaPendingPhone String?
+  createdAt    DateTime  @default(now())
+  lastLoginAt  DateTime?
+
+  profiles        Profile[]
+  parentLinks     ParentChildLink[] @relation("ParentLinks")
+  familyInvites   FamilyInvite[]    @relation("ParentInvites")
+  auditLogs       AdminAuditLog[]
+  analyticsEvents AnalyticsEvent[]
+  scanEvents      ScanEvent[]
+}
+
+// 2. profiles (one user can have multiple learner profiles: self, or children)
+model Profile {
+  id           String   @id @default(uuid())
+  userId       String
+  profileType  String   // student | parent | adult_learner | child
+  name         String
+  ageRange     String?
+  gradeLevel   String?
+  avatar       String?
+  activeGoalId String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  user                User                @relation(fields: [userId], references: [id])
+  childLinks          ParentChildLink[]   @relation("ChildLinks")
+  familyInvites       FamilyInvite[]      @relation("ChildInvites")
+  scanEvents          ScanEvent[]
+  wordProgress        UserWordProgress[]
+  quizSessions        QuizSession[]
+  xpEvents            XpEvent[]
+  streak              Streak?
+  userBadges          UserBadge[]
+  userMissions        UserMission[]
+  notifications       Notification[]
+  savedWords          SavedWord[]
+  analyticsEvents     AnalyticsEvent[]
+
+  @@index([userId])
+}
+
+// 3. parent_child_links
+model ParentChildLink {
+  id            String @id @default(uuid())
+  parentUserId  String
+  childProfileId String
+  relationship  String @default("parent")
+  permissions   String @default("{}")
+
+  parent User    @relation("ParentLinks", fields: [parentUserId], references: [id])
+  child  Profile @relation("ChildLinks", fields: [childProfileId], references: [id])
+
+  @@index([parentUserId])
+  @@index([childProfileId])
+}
+
+// 3b. family_invites
+model FamilyInvite {
+  id             String    @id @default(uuid())
+  parentUserId   String
+  childProfileId String
+  email          String?
+  inviteCode     String    @unique
+  status         String    @default("pending") // pending | accepted | cancelled | expired
+  mfaCodeHash    String?
+  mfaCodeExpiresAt DateTime?
+  acceptedAt     DateTime?
+  createdAt      DateTime  @default(now())
+
+  parent User    @relation("ParentInvites", fields: [parentUserId], references: [id])
+  child  Profile @relation("ChildInvites", fields: [childProfileId], references: [id])
+
+  @@index([parentUserId])
+  @@index([childProfileId])
+  @@index([email])
+  @@index([status])
+}
+
+// 4. languages
+model Language {
+  id         String  @id @default(uuid())
+  code       String  @unique
+  name       String
+  nativeName String?
+  direction  String  @default("ltr")
+  active     Boolean @default(true)
+
+  wordsAsSource Word[]      @relation("WordLanguage")
+  packsAsSource WordPack[]  @relation("PackLanguage")
+  packsAsTarget WordPack[]  @relation("PackTargetLanguage")
+  translations  WordTranslation[]
+}
+
+// 5. word_packs
+model WordPack {
+  id               String   @id @default(uuid())
+  name             String
+  slug             String   @unique
+  languageId       String
+  targetLanguageId String?
+  level            String?
+  category         String?
+  sku              String?  @unique
+  status           String   @default("draft") // draft | published
+  description      String?
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  language       Language    @relation("PackLanguage", fields: [languageId], references: [id])
+  targetLanguage Language?   @relation("PackTargetLanguage", fields: [targetLanguageId], references: [id])
+  packWords      PackWord[]
+  tiles          Tile[]
+  quizSessions   QuizSession[]
+}
+
+// 6. words
+model Word {
+  id              String   @id @default(uuid())
+  text            String
+  normalizedText  String
+  languageId      String
+  partOfSpeech    String?
+  difficultyScore Int      @default(1)
+  gradeLevel      String?
+  status          String   @default("draft") // draft | published
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  language     Language          @relation("WordLanguage", fields: [languageId], references: [id])
+  content      WordContent?
+  translations WordTranslation[]
+  examples     WordExample[]
+  relationsA   WordRelation[]    @relation("WordA")
+  relationsB   WordRelation[]    @relation("WordB")
+  packWords    PackWord[]
+  tiles        Tile[]
+  scanEvents   ScanEvent[]
+  progress     UserWordProgress[]
+  quizAttempts QuizAttempt[]
+  savedBy      SavedWord[]
+
+  @@index([normalizedText])
+}
+
+// 7. word_content
+model WordContent {
+  id              String  @id @default(uuid())
+  wordId          String  @unique
+  shortDefinition String
+  longDefinition  String?
+  phonetic        String?
+  origin          String?
+  funFact         String?
+  audioUrl        String?
+
+  word Word @relation(fields: [wordId], references: [id])
+}
+
+// 8. word_translations
+model WordTranslation {
+  id                 String  @id @default(uuid())
+  wordId             String
+  targetLanguageId   String
+  translation        String
+  transliteration    String?
+  exampleTranslation String?
+
+  word           Word     @relation(fields: [wordId], references: [id])
+  targetLanguage Language @relation(fields: [targetLanguageId], references: [id])
+
+  @@index([wordId])
+}
+
+// 9. word_examples
+model WordExample {
+  id          String  @id @default(uuid())
+  wordId      String
+  exampleText String
+  level       String?
+  contextTag  String?
+  ageBand     String?
+
+  word Word @relation(fields: [wordId], references: [id])
+
+  @@index([wordId])
+}
+
+// 10. word_relations (synonyms/antonyms)
+model WordRelation {
+  id            String @id @default(uuid())
+  wordId        String
+  relatedWordId String
+  relationType  String // synonym | antonym
+
+  word        Word @relation("WordA", fields: [wordId], references: [id])
+  relatedWord Word @relation("WordB", fields: [relatedWordId], references: [id])
+
+  @@index([wordId])
+}
+
+// 11. pack_words
+model PackWord {
+  id           String  @id @default(uuid())
+  packId       String
+  wordId       String
+  displayOrder Int     @default(0)
+  tileRequired Boolean @default(false)
+  levelLabel   String?
+
+  pack WordPack @relation(fields: [packId], references: [id])
+  word Word     @relation(fields: [wordId], references: [id])
+
+  @@unique([packId, wordId])
+  @@index([packId])
+}
+
+// 12. tiles
+model Tile {
+  id         String  @id @default(uuid())
+  tileCode   String  @unique
+  qrPayload  String
+  nfcPayload String?
+  packId     String?
+  wordId     String?
+  status     String  @default("unassigned") // unassigned | assigned | published
+  batchId    String?
+
+  pack       WordPack?   @relation(fields: [packId], references: [id])
+  word       Word?       @relation(fields: [wordId], references: [id])
+  batch      TileBatch?  @relation(fields: [batchId], references: [id])
+  scanEvents ScanEvent[]
+
+  @@index([packId])
+  @@index([wordId])
+}
+
+// 13. tile_batches
+model TileBatch {
+  id              String    @id @default(uuid())
+  batchName       String
+  manufacturerRef String?
+  createdAt       DateTime  @default(now())
+  exportedAt      DateTime?
+  notes           String?
+
+  tiles Tile[]
+}
+
+// 14. scan_events
+model ScanEvent {
+  id         String   @id @default(uuid())
+  userId     String
+  profileId  String
+  tileId     String?
+  wordId     String?
+  scannedAt  DateTime @default(now())
+  source     String   @default("camera") // camera | manual
+  deviceInfo String?
+  result     String   @default("success") // success | not_found | error
+
+  user    User    @relation(fields: [userId], references: [id])
+  profile Profile @relation(fields: [profileId], references: [id])
+  tile    Tile?   @relation(fields: [tileId], references: [id])
+  word    Word?   @relation(fields: [wordId], references: [id])
+
+  @@index([profileId])
+}
+
+// 15. user_word_progress
+model UserWordProgress {
+  id            String    @id @default(uuid())
+  profileId     String
+  wordId        String
+  status        String    @default("new") // new | learning | learned | mastered
+  masteryScore  Int       @default(0)
+  correctCount  Int       @default(0)
+  incorrectCount Int      @default(0)
+  lastSeenAt    DateTime?
+  nextReviewAt  DateTime?
+
+  profile Profile @relation(fields: [profileId], references: [id])
+  word    Word    @relation(fields: [wordId], references: [id])
+
+  @@unique([profileId, wordId])
+  @@index([profileId])
+}
+
+// 16. quiz_sessions
+model QuizSession {
+  id           String    @id @default(uuid())
+  profileId    String
+  activityType String    // flashcard | multiple_choice | spelling | match
+  packId       String?
+  wordId       String?
+  startedAt    DateTime  @default(now())
+  completedAt  DateTime?
+  score        Int?
+  xpAwarded    Int       @default(0)
+
+  profile  Profile       @relation(fields: [profileId], references: [id])
+  pack     WordPack?     @relation(fields: [packId], references: [id])
+  attempts QuizAttempt[]
+
+  @@index([profileId])
+}
+
+// 17. quiz_attempts
+model QuizAttempt {
+  id              String  @id @default(uuid())
+  sessionId       String
+  wordId          String
+  promptType      String
+  answer          String
+  isCorrect       Boolean
+  responseTimeMs  Int?
+
+  session QuizSession @relation(fields: [sessionId], references: [id])
+  word    Word        @relation(fields: [wordId], references: [id])
+
+  @@index([sessionId])
+}
+
+// 18. xp_events
+model XpEvent {
+  id        String   @id @default(uuid())
+  profileId String
+  eventType String
+  points    Int
+  sourceId  String?
+  createdAt DateTime @default(now())
+
+  profile Profile @relation(fields: [profileId], references: [id])
+
+  @@index([profileId])
+}
+
+// 19. streaks
+model Streak {
+  id             String   @id @default(uuid())
+  profileId      String   @unique
+  currentCount   Int      @default(0)
+  longestCount   Int      @default(0)
+  lastActiveDate String?
+  timezone       String   @default("UTC")
+
+  profile Profile @relation(fields: [profileId], references: [id])
+}
+
+// 20. badges
+model Badge {
+  id              String  @id @default(uuid())
+  code            String  @unique
+  name            String
+  description     String
+  iconUrl         String?
+  requirementJson String  @default("{}")
+  active          Boolean @default(true)
+
+  userBadges UserBadge[]
+}
+
+// 21. user_badges
+model UserBadge {
+  id            String   @id @default(uuid())
+  profileId     String
+  badgeId       String
+  earnedAt      DateTime @default(now())
+  sourceEventId String?
+
+  profile Profile @relation(fields: [profileId], references: [id])
+  badge   Badge   @relation(fields: [badgeId], references: [id])
+
+  @@unique([profileId, badgeId])
+  @@index([profileId])
+}
+
+// 22. missions
+model Mission {
+  id              String  @id @default(uuid())
+  code            String  @unique
+  title           String
+  missionType     String  @default("daily") // daily | weekly
+  requirementJson String  @default("{}")
+  xpReward        Int     @default(10)
+  active          Boolean @default(true)
+
+  userMissions UserMission[]
+}
+
+// 23. user_missions
+model UserMission {
+  id            String    @id @default(uuid())
+  profileId     String
+  missionId     String
+  progressJson  String    @default("{}")
+  status        String    @default("in_progress") // in_progress | completed
+  startedAt     DateTime  @default(now())
+  completedAt   DateTime?
+
+  profile Profile @relation(fields: [profileId], references: [id])
+  mission Mission @relation(fields: [missionId], references: [id])
+
+  @@index([profileId])
+}
+
+// 24. notifications
+model Notification {
+  id           String    @id @default(uuid())
+  profileId    String
+  type         String
+  scheduledFor DateTime?
+  sentAt       DateTime?
+  status       String    @default("scheduled") // scheduled | sent | cancelled
+  payloadJson  String    @default("{}")
+
+  profile Profile @relation(fields: [profileId], references: [id])
+
+  @@index([profileId])
+}
+
+// 25. admin_audit_logs
+model AdminAuditLog {
+  id          String   @id @default(uuid())
+  adminUserId String
+  action      String
+  entityType  String
+  entityId    String
+  beforeJson  String?
+  afterJson   String?
+  createdAt   DateTime @default(now())
+
+  admin User @relation(fields: [adminUserId], references: [id])
+
+  @@index([adminUserId])
+}
+
+// 26. feature_flags
+model FeatureFlag {
+  id           String  @id @default(uuid())
+  key          String  @unique
+  description  String?
+  enabled      Boolean @default(false)
+  rolloutJson  String  @default("{}")
+}
+
+// 27. analytics_events
+model AnalyticsEvent {
+  id             String   @id @default(uuid())
+  userId         String?
+  profileId      String?
+  eventName      String
+  propertiesJson String   @default("{}")
+  createdAt      DateTime @default(now())
+
+  user    User?    @relation(fields: [userId], references: [id])
+  profile Profile? @relation(fields: [profileId], references: [id])
+
+  @@index([eventName])
+}
+
+// saved_words (referenced throughout screens 26/43/44)
+model SavedWord {
+  id        String   @id @default(uuid())
+  profileId String
+  wordId    String
+  createdAt DateTime @default(now())
+
+  profile Profile @relation(fields: [profileId], references: [id])
+  word    Word    @relation(fields: [wordId], references: [id])
+
+  @@unique([profileId, wordId])
+  @@index([profileId])
+}

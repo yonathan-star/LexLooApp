@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>LexLoo - Your Trophies</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-dim": "#dcd9d8",
+                        "secondary-fixed-dim": "#ffb68d",
+                        "surface": "#fcf9f8",
+                        "on-secondary-fixed": "#321200",
+                        "on-tertiary": "#ffffff",
+                        "secondary": "#9a4600",
+                        "background": "#fcf9f8",
+                        "tertiary-fixed": "#e2e2e2",
+                        "on-surface": "#1b1c1b",
+                        "surface-variant": "#e4e2e1",
+                        "surface-tint": "#0053da",
+                        "on-primary-fixed": "#00174b",
+                        "surface-container-low": "#f6f3f2",
+                        "surface-bright": "#fcf9f8",
+                        "on-secondary": "#ffffff",
+                        "inverse-on-surface": "#f3f0ef",
+                        "on-secondary-fixed-variant": "#763300",
+                        "on-secondary-container": "#672c00",
+                        "on-error": "#ffffff",
+                        "error-container": "#ffdad6",
+                        "outline": "#737687",
+                        "primary": "#0051d5",
+                        "on-error-container": "#93000a",
+                        "inverse-primary": "#b4c5ff",
+                        "surface-container-highest": "#e4e2e1",
+                        "tertiary-container": "#737575",
+                        "secondary-container": "#fe893c",
+                        "primary-fixed-dim": "#b4c5ff",
+                        "primary-fixed": "#dbe1ff",
+                        "surface-container-lowest": "#ffffff",
+                        "outline-variant": "#c3c6d8",
+                        "on-tertiary-container": "#fcfcfc",
+                        "surface-container-high": "#eae7e7",
+                        "on-primary-fixed-variant": "#003ea7",
+                        "on-surface-variant": "#424655",
+                        "inverse-surface": "#303030",
+                        "secondary-fixed": "#ffdbc9",
+                        "on-background": "#1b1c1b",
+                        "on-tertiary-fixed-variant": "#454747",
+                        "tertiary-fixed-dim": "#c6c6c7",
+                        "on-tertiary-fixed": "#1a1c1c",
+                        "error": "#ba1a1a",
+                        "surface-container": "#f0edec",
+                        "primary-container": "#276afa",
+                        "on-primary-container": "#fefcff",
+                        "on-primary": "#ffffff",
+                        "tertiary": "#5a5c5c"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "margin-mobile": "20px",
+                        "xs": "4px",
+                        "lg": "32px",
+                        "sm": "12px",
+                        "md": "20px",
+                        "gutter-mobile": "12px",
+                        "xl": "48px",
+                        "base": "8px"
+                    },
+                    "fontFamily": {
+                        "label-bold": ["Sora"],
+                        "body-md": ["Sora"],
+                        "body-lg": ["Sora"],
+                        "headline-md": ["Sora"],
+                        "headline-sm": ["Sora"],
+                        "display-lg": ["Sora"],
+                        "label-sm": ["Sora"]
+                    },
+                    "fontSize": {
+                        "label-bold": ["12px", {"lineHeight": "1", "letterSpacing": "0.02em", "fontWeight": "700"}],
+                        "body-md": ["14px", {"lineHeight": "1.5", "fontWeight": "400"}],
+                        "body-lg": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                        "headline-md": ["24px", {"lineHeight": "1.3", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                        "headline-sm": ["20px", {"lineHeight": "1.4", "fontWeight": "600"}],
+                        "display-lg": ["32px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "label-sm": ["11px", {"lineHeight": "1", "fontWeight": "500"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            background-color: #fcf9f8;
+            font-family: 'Sora', sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+        }
+        .progress-ring-circle {
+            transition: stroke-dashoffset 0.35s;
+            transform: rotate(-90deg);
+            transform-origin: 50% 50%;
+        }
+        .achievement-glow {
+            filter: drop-shadow(0 0 8px rgba(0, 81, 213, 0.3));
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-surface pb-32">
+<!-- Top App Bar -->
+<header class="fixed top-0 w-full z-50 bg-surface/70 dark:bg-surface-container-low/70 backdrop-blur-xl border-b border-white/40 dark:border-white/10 shadow-sm shadow-secondary/5">
+<div class="flex justify-between items-center px-margin-mobile py-4 max-w-7xl mx-auto">
+<h1 class="font-display-lg text-display-lg text-primary tracking-tight">LexLoo</h1>
+<div class="flex items-center gap-3">
+<span class="font-label-bold text-label-bold text-primary">🔥 12 Streak • 1.2k XP</span>
+<div class="w-10 h-10 rounded-full bg-surface-container-high border-2 border-white overflow-hidden shadow-sm">
+<img class="w-full h-full object-cover" data-alt="A close-up high-fidelity portrait of a friendly user avatar for a wellness app, featuring soft studio lighting and a clean, minimalist background. The style is modern and sophisticated, with high-quality digital rendering. The color palette consists of soft neutrals with a primary blue accent, matching a clean glassmorphism aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBsK_BL73SFmDXOa1jcPaZ54qq12kGvsvCF9mU4vz7XpSk7LYWo5_DkC3Vyj7wdeKMpd0-pRuv8F112O_u5oIGwDOAGWy0kE2kDgM0lpTQvDuUVmkIcy1N93QnNfPuQV4jCctfaUi5PGKBmFQySlQ7WPhmpSFUM6iyjtM7aubVGv9vVzN19WdclpcScpj7NYatDSReKDtHJtMXhnyZuzqDOmJMo8HLuoc25IS508-34G_Q2wfuGdWPv1kYOQWkYSK-s4E-Q5YQMM9WB"/>
+</div>
+</div>
+</div>
+</header>
+<main class="mt-24 px-margin-mobile max-w-7xl mx-auto space-y-md">
+<!-- Collection Progress Hero -->
+<section class="glass-card rounded-3xl p-md flex items-center justify-between shadow-sm overflow-hidden relative">
+<div class="relative z-10">
+<h2 class="font-headline-md text-headline-md text-on-surface mb-xs">Your Trophies</h2>
+<p class="font-body-md text-body-md text-on-surface-variant">3 of 8 badges collected</p>
+<div class="mt-md">
+<button class="bg-primary text-on-primary font-label-bold text-label-bold px-6 py-3 rounded-full shadow-lg shadow-primary/20 active:scale-95 transition-transform">
+                        Share Progress
+                    </button>
+</div>
+</div>
+<!-- Circular Progress Ring -->
+<div class="relative w-32 h-32 flex items-center justify-center">
+<svg class="w-full h-full">
+<circle class="text-surface-container-high" cx="64" cy="64" fill="transparent" r="54" stroke="currentColor" stroke-width="12"></circle>
+<circle class="text-secondary progress-ring-circle" cx="64" cy="64" fill="transparent" r="54" stroke="currentColor" stroke-dasharray="339.29" stroke-dashoffset="212.05" stroke-linecap="round" stroke-width="12"></circle>
+</svg>
+<div class="absolute inset-0 flex flex-col items-center justify-center">
+<span class="font-display-lg text-headline-md text-secondary">37%</span>
+</div>
+</div>
+<!-- Atmospheric background element -->
+<div class="absolute -right-10 -bottom-10 w-48 h-48 bg-primary/5 rounded-full blur-3xl"></div>
+</section>
+<!-- Achievements Grid -->
+<section class="grid grid-cols-2 md:grid-cols-4 gap-md">
+<!-- Unlocked Achievement: 7-Day Streak -->
+<div class="glass-card rounded-3xl p-md flex flex-col items-center text-center space-y-sm relative group cursor-pointer hover:shadow-md transition-shadow">
+<div class="absolute top-3 right-3 text-primary achievement-glow">
+<span class="material-symbols-outlined text-lg" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+<div class="w-20 h-20 bg-secondary-fixed rounded-2xl flex items-center justify-center mb-sm shadow-inner relative">
+<span class="material-symbols-outlined text-4xl text-secondary" style="font-variation-settings: 'FILL' 1;">local_fire_department</span>
+</div>
+<h3 class="font-label-bold text-label-bold text-on-surface">7-Day Streak</h3>
+<p class="font-label-sm text-label-sm text-on-surface-variant">You're on fire! Keep the momentum going.</p>
+</div>
+<!-- Unlocked Achievement: Scholar -->
+<div class="glass-card rounded-3xl p-md flex flex-col items-center text-center space-y-sm relative group cursor-pointer hover:shadow-md transition-shadow">
+<div class="absolute top-3 right-3 text-primary achievement-glow">
+<span class="material-symbols-outlined text-lg" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+<div class="w-20 h-20 bg-primary-fixed rounded-2xl flex items-center justify-center mb-sm shadow-inner">
+<span class="material-symbols-outlined text-4xl text-primary" style="font-variation-settings: 'FILL' 1;">school</span>
+</div>
+<h3 class="font-label-bold text-label-bold text-on-surface">Scholar</h3>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Completed your first 10 scans successfully.</p>
+</div>
+<!-- Unlocked Achievement: Early Bird -->
+<div class="glass-card rounded-3xl p-md flex flex-col items-center text-center space-y-sm relative group cursor-pointer hover:shadow-md transition-shadow">
+<div class="absolute top-3 right-3 text-primary achievement-glow">
+<span class="material-symbols-outlined text-lg" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+<div class="w-20 h-20 bg-orange-100 rounded-2xl flex items-center justify-center mb-sm shadow-inner">
+<span class="material-symbols-outlined text-4xl text-orange-600" style="font-variation-settings: 'FILL' 1;">wb_sunny</span>
+</div>
+<h3 class="font-label-bold text-label-bold text-on-surface">Early Bird</h3>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Logged breakfast 5 days before 8:00 AM.</p>
+</div>
+<!-- Locked Achievement: Marathoner -->
+<div class="glass-card rounded-3xl p-md flex flex-col items-center text-center space-y-sm relative opacity-60 grayscale filter">
+<div class="absolute top-3 right-3 text-on-surface-variant">
+<span class="material-symbols-outlined text-lg">lock</span>
+</div>
+<div class="w-20 h-20 bg-surface-container-highest rounded-2xl flex items-center justify-center mb-sm">
+<span class="material-symbols-outlined text-4xl text-outline" style="font-variation-settings: 'FILL' 0;">directions_run</span>
+</div>
+<h3 class="font-label-bold text-label-bold text-on-surface">Marathoner</h3>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Scan 30 meals in a single month.</p>
+</div>
+<!-- Locked Achievement: Master Chef -->
+<div class="glass-card rounded-3xl p-md flex flex-col items-center text-center space-y-sm relative opacity-60 grayscale filter">
+<div class="absolute top-3 right-3 text-on-surface-variant">
+<span class="material-symbols-outlined text-lg">lock</span>
+</div>
+<div class="w-20 h-20 bg-surface-container-highest rounded-2xl flex items-center justify-center mb-sm">
+<span class="material-symbols-outlined text-4xl text-outline" style="font-variation-settings: 'FILL' 0;">restaurant_menu</span>
+</div>
+<h3 class="font-label-bold text-label-bold text-on-surface">Master Chef</h3>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Complete all 12 practice recipes.</p>
+</div>
+<!-- Locked Achievement: Data Scientist -->
+<div class="glass-card rounded-3xl p-md flex flex-col items-center text-center space-y-sm relative opacity-60 grayscale filter">
+<div class="absolute top-3 right-3 text-on-surface-variant">
+<span class="material-symbols-outlined text-lg">lock</span>
+</div>
+<div class="w-20 h-20 bg-surface-container-highest rounded-2xl flex items-center justify-center mb-sm">
+<span class="material-symbols-outlined text-4xl text-outline" style="font-variation-settings: 'FILL' 0;">analytics</span>
+</div>
+<h3 class="font-label-bold text-label-bold text-on-surface">Data Scientist</h3>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Review your weekly progress 4 times.</p>
+</div>
+<!-- Locked Achievement: Green Eater -->
+<div class="glass-card rounded-3xl p-md flex flex-col items-center text-center space-y-sm relative opacity-60 grayscale filter">
+<div class="absolute top-3 right-3 text-on-surface-variant">
+<span class="material-symbols-outlined text-lg">lock</span>
+</div>
+<div class="w-20 h-20 bg-surface-container-highest rounded-2xl flex items-center justify-center mb-sm">
+<span class="material-symbols-outlined text-4xl text-outline" style="font-variation-settings: 'FILL' 0;">eco</span>
+</div>
+<h3 class="font-label-bold text-label-bold text-on-surface">Green Eater</h3>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Scan 15 vegetarian meals in a row.</p>
+</div>
+<!-- Locked Achievement: Community Star -->
+<div class="glass-card rounded-3xl p-md flex flex-col items-center text-center space-y-sm relative opacity-60 grayscale filter">
+<div class="absolute top-3 right-3 text-on-surface-variant">
+<span class="material-symbols-outlined text-lg">lock</span>
+</div>
+<div class="w-20 h-20 bg-surface-container-highest rounded-2xl flex items-center justify-center mb-sm">
+<span class="material-symbols-outlined text-4xl text-outline" style="font-variation-settings: 'FILL' 0;">stars</span>
+</div>
+<h3 class="font-label-bold text-label-bold text-on-surface">Community Star</h3>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Share 5 progress updates with friends.</p>
+</div>
+</section>
+<!-- Achievement Roadmap Card -->
+<section class="glass-card rounded-3xl p-md mt-md relative overflow-hidden">
+<h2 class="font-headline-sm text-headline-sm text-on-surface mb-md">Upcoming Achievement</h2>
+<div class="flex items-center gap-md">
+<div class="w-16 h-16 bg-surface-container-high rounded-2xl flex items-center justify-center flex-shrink-0">
+<span class="material-symbols-outlined text-2xl text-outline">fitness_center</span>
+</div>
+<div class="flex-1">
+<div class="flex justify-between items-end mb-xs">
+<span class="font-label-bold text-label-bold text-on-surface">Fitness Pro</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">12 / 20 Scans</span>
+</div>
+<div class="w-full h-2 bg-surface-container-high rounded-full overflow-hidden">
+<div class="h-full bg-primary rounded-full" style="width: 60%"></div>
+</div>
+</div>
+</div>
+<!-- Background Decoration -->
+<div class="absolute -top-12 -right-12 w-32 h-32 bg-secondary/5 rounded-full blur-2xl"></div>
+</section>
+</main>
+<!-- Bottom Navigation Bar -->
+<nav class="fixed bottom-md left-md right-md rounded-xl z-50 bg-black/85 dark:bg-black/90 backdrop-blur-lg border border-white/10 shadow-xl shadow-black/20 flex justify-around items-center h-16 w-[calc(100%-40px)] mx-auto px-4">
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-surface-bright transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="home">home</span>
+<span class="font-label-sm text-label-sm font-label-bold">Home</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-surface-bright transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="document_scanner">document_scanner</span>
+<span class="font-label-sm text-label-sm font-label-bold">Scan</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-surface-bright transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="exercise">exercise</span>
+<span class="font-label-sm text-label-sm font-label-bold">Practice</span>
+</a>
+<a class="flex flex-col items-center justify-center text-primary-fixed-dim bg-white/10 rounded-lg py-1 px-4 scale-90 transition-all duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="analytics" style="font-variation-settings: 'FILL' 1;">analytics</span>
+<span class="font-label-sm text-label-sm font-label-bold">Progress</span>
+</a>
+</nav>
+<script>
+        // Micro-interaction for achievement cards
+        document.querySelectorAll('.glass-card').forEach(card => {
+            card.addEventListener('mousedown', () => {
+                card.style.transform = 'scale(0.98)';
+                card.style.transition = 'transform 0.1s';
+            });
+            card.addEventListener('mouseup', () => {
+                card.style.transform = 'scale(1)';
+            });
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'scale(1)';
+            });
+        });
+    </script>
+</body></html>

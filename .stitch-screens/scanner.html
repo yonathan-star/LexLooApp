@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>LexLoo Scanner</title>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Google Font: Sora -->
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-dim": "#dcd9d8",
+                        "secondary-fixed-dim": "#ffb68d",
+                        "surface": "#fcf9f8",
+                        "on-secondary-fixed": "#321200",
+                        "on-tertiary": "#ffffff",
+                        "secondary": "#9a4600",
+                        "background": "#fcf9f8",
+                        "tertiary-fixed": "#e2e2e2",
+                        "on-surface": "#1b1c1b",
+                        "surface-variant": "#e4e2e1",
+                        "surface-tint": "#0053da",
+                        "on-primary-fixed": "#00174b",
+                        "surface-container-low": "#f6f3f2",
+                        "surface-bright": "#fcf9f8",
+                        "on-secondary": "#ffffff",
+                        "inverse-on-surface": "#f3f0ef",
+                        "on-secondary-fixed-variant": "#763300",
+                        "on-secondary-container": "#672c00",
+                        "on-error": "#ffffff",
+                        "error-container": "#ffdad6",
+                        "outline": "#737687",
+                        "primary": "#0051d5",
+                        "on-error-container": "#93000a",
+                        "inverse-primary": "#b4c5ff",
+                        "surface-container-highest": "#e4e2e1",
+                        "tertiary-container": "#737575",
+                        "secondary-container": "#fe893c",
+                        "primary-fixed-dim": "#b4c5ff",
+                        "primary-fixed": "#dbe1ff",
+                        "surface-container-lowest": "#ffffff",
+                        "outline-variant": "#c3c6d8",
+                        "on-tertiary-container": "#fcfcfc",
+                        "surface-container-high": "#eae7e7",
+                        "on-primary-fixed-variant": "#003ea7",
+                        "on-surface-variant": "#424655",
+                        "inverse-surface": "#303030",
+                        "secondary-fixed": "#ffdbc9",
+                        "on-background": "#1b1c1b",
+                        "on-tertiary-fixed-variant": "#454747",
+                        "tertiary-fixed-dim": "#c6c6c7",
+                        "on-tertiary-fixed": "#1a1c1c",
+                        "error": "#ba1a1a",
+                        "surface-container": "#f0edec",
+                        "primary-container": "#276afa",
+                        "on-primary-container": "#fefcff",
+                        "on-primary": "#ffffff",
+                        "tertiary": "#5a5c5c"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "margin-mobile": "20px",
+                        "xs": "4px",
+                        "lg": "32px",
+                        "sm": "12px",
+                        "md": "20px",
+                        "gutter-mobile": "12px",
+                        "xl": "48px",
+                        "base": "8px"
+                    },
+                    "fontFamily": {
+                        "label-bold": ["Sora"],
+                        "body-md": ["Sora"],
+                        "body-lg": ["Sora"],
+                        "headline-md": ["Sora"],
+                        "headline-sm": ["Sora"],
+                        "display-lg": ["Sora"],
+                        "label-sm": ["Sora"]
+                    },
+                    "fontSize": {
+                        "label-bold": ["12px", {"lineHeight": "1", "letterSpacing": "0.02em", "fontWeight": "700"}],
+                        "body-md": ["14px", {"lineHeight": "1.5", "fontWeight": "400"}],
+                        "body-lg": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                        "headline-md": ["24px", {"lineHeight": "1.3", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                        "headline-sm": ["20px", {"lineHeight": "1.4", "fontWeight": "600"}],
+                        "display-lg": ["32px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "label-sm": ["11px", {"lineHeight": "1", "fontWeight": "500"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            display: inline-block;
+            line-height: 1;
+        }
+        .scan-glow {
+            animation: pulse-glow 2s infinite ease-in-out;
+        }
+        @keyframes pulse-glow {
+            0%, 100% { border-color: rgba(0, 81, 213, 0.4); box-shadow: 0 0 10px rgba(0, 81, 213, 0.2); }
+            50% { border-color: rgba(0, 81, 213, 0.9); box-shadow: 0 0 25px rgba(0, 81, 213, 0.5); }
+        }
+        .shimmer-text {
+            background: linear-gradient(90deg, #ffffff 0%, #0051d5 50%, #ffffff 100%);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: shimmer 2s linear infinite;
+        }
+        @keyframes shimmer {
+            to { background-position: 200% center; }
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface text-on-surface font-body-md overflow-hidden h-screen flex flex-col">
+<!-- Camera Background Simulator -->
+<div class="fixed inset-0 z-0">
+<div class="w-full h-full bg-cover bg-center transition-all duration-700" data-alt="A first-person perspective view of a smartphone camera viewfinder focused on a high-end educational vocabulary game board. The setting is a brightly lit, modern minimalist home with soft natural sunlight streaming onto a light oak table. The image has a crisp, high-fidelity aesthetic with deep focus and vivid organic colors, primarily greens and oranges from nearby indoor plants and fresh fruits. The overall mood is intelligent, clean, and technologically advanced." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDDoPxgskZIRLkovLyJ_BJ3T4b2Nrmq3gDodkwVL4UwLvkgvMjGqYAb1yxMVvRTWtLcQ2v-ubjcbGcW5gL40vxKhNcngxX01Vu7LqkO7ijgYE1HQPKTE8qEo1VbIstidTQKylIbGPDnIHdcs7eNH-YrQW2ilv0vYNGlTN2Qup1I3ZeEjf-MqK8WSyKjbtzAUuAFXBXTyDeNWkkoGVkPc_Irpvy7rXzWeodMPeAE9c2XA2hCUTelbh6DxaCleLHrfpg3TUbJL8sh-Hv7')">
+</div>
+<!-- Scanning Overlay Layers -->
+<div class="absolute inset-0 bg-black/20 backdrop-blur-[2px]"></div>
+</div>
+<!-- Header (TopAppBar) -->
+<header class="fixed top-0 w-full z-50 bg-surface/70 dark:bg-surface-container-low/70 backdrop-blur-xl border-b border-white/40 shadow-sm shadow-secondary/5">
+<div class="flex justify-between items-center px-margin-mobile py-4 max-w-7xl mx-auto">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-primary-container/20 flex items-center justify-center border border-white/40">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">person</span>
+</div>
+<span class="font-display-lg text-display-lg text-primary tracking-tight">LexLoo</span>
+</div>
+<div class="bg-white/40 px-3 py-1.5 rounded-full border border-white/60 shadow-sm">
+<span class="font-label-bold text-label-bold text-primary">🔥 12 Streak • 1.2k XP</span>
+</div>
+</div>
+</header>
+<!-- Main Scanner Canvas -->
+<main class="relative flex-1 flex flex-col items-center justify-center z-10 px-margin-mobile">
+<!-- Scan Target Frame -->
+<div class="relative w-72 h-72 md:w-80 md:h-80 flex items-center justify-center">
+<!-- The Rounded Square Scan Target -->
+<div class="absolute inset-0 border-2 border-white/40 rounded-[40px] scan-glow backdrop-blur-sm">
+<!-- Corner Indicators -->
+<div class="absolute top-0 left-0 w-12 h-12 border-t-4 border-l-4 border-primary rounded-tl-[40px]"></div>
+<div class="absolute top-0 right-0 w-12 h-12 border-t-4 border-r-4 border-primary rounded-tr-[40px]"></div>
+<div class="absolute bottom-0 left-0 w-12 h-12 border-b-4 border-l-4 border-primary rounded-bl-[40px]"></div>
+<div class="absolute bottom-0 right-0 w-12 h-12 border-b-4 border-r-4 border-primary rounded-br-[40px]"></div>
+</div>
+<!-- Analyzing Pill Overlay -->
+<div class="absolute -top-12 animate-bounce">
+<div class="bg-black/80 backdrop-blur-md px-4 py-2 rounded-full border border-white/20 flex items-center gap-2 shadow-2xl">
+<span class="material-symbols-outlined text-primary text-sm" style="font-variation-settings: 'FILL' 1;">analytics</span>
+<span class="text-white font-label-bold text-label-bold uppercase tracking-widest shimmer-text">Analyzing...</span>
+</div>
+</div>
+<!-- Animated Scanning Line -->
+<div class="absolute w-full h-0.5 bg-gradient-to-r from-transparent via-primary to-transparent blur-[2px] top-0 transition-all duration-[2500ms] linear" id="scanLine"></div>
+</div>
+<!-- Helper UI -->
+<div class="mt-xl text-center space-y-md">
+<div class="bg-white/60 backdrop-blur-lg px-6 py-4 rounded-2xl border border-white/80 shadow-xl max-w-xs mx-auto">
+<p class="text-on-surface font-label-bold text-label-bold leading-tight">
+                    Align word tile within the frame to scan
+                </p>
+</div>
+<button class="bg-surface/40 hover:bg-surface/60 transition-colors backdrop-blur-md px-5 py-2.5 rounded-full border border-white/60 flex items-center gap-2 mx-auto active:scale-95 duration-200">
+<span class="material-symbols-outlined text-on-surface-variant text-[18px]">keyboard</span>
+<span class="font-label-bold text-label-bold text-on-surface-variant">Enter code manually</span>
+</button>
+</div>
+</main>
+<!-- Bottom Navigation Shell -->
+<nav class="fixed bottom-md left-md right-md rounded-xl z-50 bg-black/85 backdrop-blur-lg border border-white/10 shadow-xl shadow-black/20">
+<div class="flex justify-around items-center h-16 w-full px-4">
+<!-- Home -->
+<button class="flex flex-col items-center justify-center text-on-surface-variant hover:text-surface-bright transition-colors">
+<span class="material-symbols-outlined" data-icon="home">home</span>
+<span class="font-label-sm text-label-sm font-label-bold">Home</span>
+</button>
+<!-- Scan (Active) -->
+<button class="flex flex-col items-center justify-center text-primary-fixed-dim bg-white/10 rounded-lg py-1 px-4 scale-105">
+<span class="material-symbols-outlined" data-icon="document_scanner" style="font-variation-settings: 'FILL' 1;">document_scanner</span>
+<span class="font-label-sm text-label-sm font-label-bold">Scan</span>
+</button>
+<!-- Practice -->
+<button class="flex flex-col items-center justify-center text-on-surface-variant hover:text-surface-bright transition-colors">
+<span class="material-symbols-outlined" data-icon="exercise">exercise</span>
+<span class="font-label-sm text-label-sm font-label-bold">Practice</span>
+</button>
+<!-- Progress -->
+<button class="flex flex-col items-center justify-center text-on-surface-variant hover:text-surface-bright transition-colors">
+<span class="material-symbols-outlined" data-icon="analytics">analytics</span>
+<span class="font-label-sm text-label-sm font-label-bold">Progress</span>
+</button>
+</div>
+</nav>
+<!-- Floating Action Effect Script -->
+<script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const scanLine = document.getElementById('scanLine');
+            let movingDown = true;
+
+            const animateScan = () => {
+                if (movingDown) {
+                    scanLine.style.top = '100%';
+                    scanLine.style.opacity = '1';
+                } else {
+                    scanLine.style.top = '0%';
+                    scanLine.style.opacity = '0.5';
+                }
+                movingDown = !movingDown;
+                setTimeout(animateScan, 2500);
+            };
+
+            animateScan();
+            
+            // Interaction: Tap target to simulate "Capture"
+            const target = document.querySelector('.scan-glow');
+            target.addEventListener('touchstart', () => {
+                target.style.transform = 'scale(0.95)';
+                target.style.backgroundColor = 'rgba(255,255,255,0.2)';
+            });
+            target.addEventListener('touchend', () => {
+                target.style.transform = 'scale(1)';
+                target.style.backgroundColor = 'transparent';
+            });
+        });
+    </script>
+</body></html>
