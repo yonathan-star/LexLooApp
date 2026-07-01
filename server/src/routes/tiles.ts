@@ -44,7 +44,7 @@ tilesRouter.get("/resolve/:code", requireAuth, async (req, res) => {
     where: { tileCode: req.params.code.toUpperCase() },
     include: { word: { include: { content: true } }, pack: true },
   });
-  if (!tile || !tile.word) {
+  if (!tile || !tile.word || tile.word.status !== "published" || (tile.pack && tile.pack.status !== "published")) {
     return fail(res, 404, "We could not read that tile. Try again or enter the code manually.");
   }
   return ok(res, { tile, word: tile.word, pack: tile.pack });

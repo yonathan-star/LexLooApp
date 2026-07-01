@@ -175,7 +175,7 @@ export function useScanTile() {
         word: Word | null;
         pack: WordPack | null;
         tile?: { id: string; tileCode: string; status: string } | null;
-        reason?: "resolved" | "invalid_code" | "not_assigned";
+        reason?: "resolved" | "invalid_code" | "not_assigned" | "not_ready";
         newBadges?: { code: string; name: string }[];
         message?: string;
       }>(

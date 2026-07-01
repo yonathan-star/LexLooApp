@@ -31,11 +31,17 @@ export function ManualCodeEntryScreen() {
       return;
     }
     setError(undefined);
-    const result = await scanTile.mutateAsync({ profileId: activeProfile.id, code: normalized, source: "manual" });
-    if (result.word) {
-      navigation.navigate("WordDetail", { wordId: result.word.id });
-    } else {
-      navigation.navigate("TileNotOwned", { packId: result.pack?.id, tileCode: result.tile?.tileCode });
+    try {
+      const result = await scanTile.mutateAsync({ profileId: activeProfile.id, code: normalized, source: "manual" });
+      if (result.word) {
+        navigation.navigate("WordDetail", { wordId: result.word.id });
+      } else if (result.reason === "not_assigned" || result.reason === "not_ready") {
+        navigation.navigate("TileNotOwned", { packId: result.pack?.id, tileCode: result.tile?.tileCode });
+      } else {
+        setError(result.message ?? "We could not find that code. Check it and try again.");
+      }
+    } catch (err: any) {
+      setError(err?.message ?? "We could not check that code. Try again.");
     }
   }
 

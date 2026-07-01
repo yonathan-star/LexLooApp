@@ -133,13 +133,13 @@ export function CreateAccountScreen() {
           ) : (
             <>
               <View style={styles.socialStack}>
-                <Pressable style={styles.socialButton} onPress={() => Alert.alert("Coming soon", "Apple sign-in will be connected before launch.")}>
-                  <Ionicons name="logo-apple" size={20} color={colors.textPrimary} />
-                  <Text style={styles.socialText}>Continue with Apple</Text>
+                <Pressable style={[styles.socialButton, styles.socialButtonDisabled]} disabled accessibilityState={{ disabled: true }}>
+                  <Ionicons name="logo-apple" size={20} color={colors.textMuted} />
+                  <Text style={[styles.socialText, styles.socialTextDisabled]}>Apple sign-in soon</Text>
                 </Pressable>
-                <Pressable style={styles.socialButton} onPress={() => Alert.alert("Coming soon", "Google sign-in will be connected before launch.")}>
-                  <Ionicons name="logo-google" size={20} color={colors.textPrimary} />
-                  <Text style={styles.socialText}>Continue with Google</Text>
+                <Pressable style={[styles.socialButton, styles.socialButtonDisabled]} disabled accessibilityState={{ disabled: true }}>
+                  <Ionicons name="logo-google" size={20} color={colors.textMuted} />
+                  <Text style={[styles.socialText, styles.socialTextDisabled]}>Google sign-in soon</Text>
                 </Pressable>
               </View>
               <View style={styles.dividerRow}>
@@ -212,6 +212,8 @@ function createStyles(colors: ReturnType<typeof useColors>) {
     gap: spacing.sm,
   },
   socialText: { color: colors.textPrimary, fontFamily: fontFamily.bodyBold, fontSize: 14 },
+  socialButtonDisabled: { opacity: 0.62 },
+  socialTextDisabled: { color: colors.textMuted },
   dividerRow: { flexDirection: "row", alignItems: "center", gap: spacing.sm, marginBottom: spacing.md },
   divider: { flex: 1, height: 1, backgroundColor: colors.border },
   dividerText: { color: colors.textMuted, fontFamily: fontFamily.bodyBold, fontSize: 11, textTransform: "uppercase" },

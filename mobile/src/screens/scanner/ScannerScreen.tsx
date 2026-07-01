@@ -56,7 +56,7 @@ export function ScannerScreen() {
             lockRef.current = false;
           }, 900);
         } else {
-          if (result.reason === "not_assigned" || result.tile) {
+          if (result.reason === "not_assigned" || result.reason === "not_ready") {
             navigation.navigate("TileNotOwned", { packId: result.pack?.id, tileCode: result.tile?.tileCode });
             setStatus("idle");
           } else {

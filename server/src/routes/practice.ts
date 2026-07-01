@@ -15,6 +15,7 @@ export const practiceRouter = Router();
 practiceRouter.get("/quiz-options/:wordId", requireAuth, async (req, res) => {
   const word = await prisma.word.findUnique({ where: { id: req.params.wordId }, include: { content: true } });
   if (!word) return fail(res, 404, "Word not found");
+  if (word.status !== "published" && req.auth!.role !== "admin") return fail(res, 404, "Word not found");
 
   const distractors = await prisma.word.findMany({
     where: { languageId: word.languageId, id: { not: word.id }, status: "published" },

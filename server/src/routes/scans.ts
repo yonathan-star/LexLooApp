@@ -47,8 +47,11 @@ scansRouter.post("/", requireAuth, async (req, res) => {
     include: { word: { include: { content: true } }, pack: true },
   });
 
-  const result = tile && tile.word ? "success" : "not_found";
-  const reason = !tile ? "invalid_code" : !tile.word ? "not_assigned" : "resolved";
+  const canResolveWord = Boolean(
+    tile?.word && tile.word.status === "published" && (!tile.pack || tile.pack.status === "published")
+  );
+  const result = canResolveWord ? "success" : "not_found";
+  const reason = !tile ? "invalid_code" : !tile.word ? "not_assigned" : canResolveWord ? "resolved" : "not_ready";
 
   const scan = await prisma.scanEvent.create({
     data: {
@@ -72,6 +75,8 @@ scansRouter.post("/", requireAuth, async (req, res) => {
     const message =
       reason === "not_assigned"
         ? "This LexLoo code is real, but it is not assigned to a word yet."
+        : reason === "not_ready"
+          ? "This LexLoo code is real, but its word is not ready yet."
         : "We could not read that code. Try again or enter it manually.";
     return ok(res, { scan, word: null, pack: tile?.pack ?? null, tile: tile ?? null, reason, message });
   }
