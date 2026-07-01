@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useMemo } from "react";
 import { DimensionValue, Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 import { LexLooMark } from "../../components/LexLooMark";
+import { LexMascot } from "../../components/LexMascot";
 import { ProfileAvatar } from "../../components/ProfileAvatar";
 import { LinearGradient } from "expo-linear-gradient";
 import * as Speech from "expo-speech";
@@ -16,9 +17,6 @@ import type { Mission } from "../../types";
 import { useColors } from "../../context/ThemeContext";
 
 function useJumpToScannerAfterOnboarding() {
-  const colors = useColors();
-  const styles = useMemo(() => createStyles(colors), [colors]);
-  const sectionStyles = useMemo(() => createSectionStyles(colors), [colors]);
   const navigation = useNavigation<any>();
   const { justOnboarded, clearJustOnboarded } = useAuth();
   const handledRef = useRef(false);
@@ -53,6 +51,9 @@ export function HomeScreen() {
   const dailyWord = recommendations.data?.wordOfDay?.word ?? recommendations.data?.wearOfDay?.word;
   const missionList = missions.data ?? [];
   const todayLabel = new Date().toLocaleDateString(undefined, { day: "2-digit", month: "short" }).toUpperCase();
+  const lexTip = dailyWord
+    ? `Lex picked "${dailyWord.text}" for today's segment. Practice it once to keep your streak warm.`
+    : "Lex is ready. Choose a pack and your first daily word will appear here.";
   const greeting = (() => {
     const hour = new Date().getHours();
     if (hour < 12) return "Good morning";
@@ -84,6 +85,14 @@ export function HomeScreen() {
           <View style={styles.streakPill}>
             <Ionicons name="flame" size={13} color={colors.accentOrange} />
             <Text style={styles.streakText}>{streakCount} · {currentXp} XP</Text>
+          </View>
+        </View>
+
+        <View style={styles.coachCard}>
+          <LexMascot size={96} mood={streakCount > 0 ? "celebrate" : "happy"} />
+          <View style={styles.coachBubble}>
+            <Text style={styles.coachEyebrow}>Lex says</Text>
+            <Text style={styles.coachText}>{lexTip}</Text>
           </View>
         </View>
 
@@ -184,7 +193,7 @@ export function HomeScreen() {
             ))
           ) : (
             <>
-              <MissionRow icon="scan-outline" title="Scan 5 Environment Items" progress="0/5" reward="+50 XP" percent="0%" accent={colors.accentOrange} />
+              <MissionRow icon="scan-outline" title="Scan 1 LexLoo Code" progress="0/1" reward="+10 XP" percent="0%" accent={colors.accentOrange} />
               <MissionRow icon="school-outline" title="Master 3 New Words" progress="0/3" reward="+120 XP" percent="0%" accent={colors.primary} />
             </>
           )}
@@ -295,6 +304,21 @@ function createStyles(colors: ReturnType<typeof useColors>) {
   level: { color: colors.textMuted, fontFamily: fontFamily.mono, fontSize: 11, marginTop: 1 },
   streakPill: { flexDirection: "row", alignItems: "center", gap: 5, backgroundColor: colors.orangeWash, borderRadius: radius.pill, paddingHorizontal: 14, paddingVertical: 8, borderWidth: 1, borderColor: colors.orangeWash },
   streakText: { color: colors.textSecondary, fontFamily: fontFamily.bodyBold, fontSize: 12 },
+  coachCard: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: spacing.md,
+    backgroundColor: colors.card,
+    borderWidth: 1,
+    borderColor: colors.border,
+    borderRadius: radius.xl,
+    paddingVertical: spacing.sm,
+    paddingHorizontal: spacing.md,
+    ...shadow.card,
+  },
+  coachBubble: { flex: 1 },
+  coachEyebrow: { color: colors.accentOrangePressed, fontFamily: fontFamily.bodyBold, fontSize: 11, letterSpacing: 1.1, textTransform: "uppercase", marginBottom: 4 },
+  coachText: { color: colors.textPrimary, fontFamily: fontFamily.headline, fontSize: 17, lineHeight: 23 },
 
   // Dashboard card
   dashboardCard: { backgroundColor: colors.card, borderColor: colors.border, borderWidth: 1, borderRadius: 32, padding: 24, alignItems: "center", ...shadow.card },
