@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useMemo } from "react";
+import React, { useEffect, useRef, useMemo, useState } from "react";
 import { DimensionValue, Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 import { LexLooMark } from "../../components/LexLooMark";
 import { LexMascot } from "../../components/LexMascot";
@@ -13,6 +13,7 @@ import { useAuth } from "../../context/AuthContext";
 import { useMissionsToday, useProgress, useRecommendations } from "../../api/queries";
 import { ErrorState, LoadingState } from "../../components/StateViews";
 import { trackScreenEvent } from "../../lib/analytics";
+import { haptics } from "../../lib/haptics";
 import type { Mission } from "../../types";
 import { useColors } from "../../context/ThemeContext";
 
@@ -37,9 +38,15 @@ export function HomeScreen() {
   useJumpToScannerAfterOnboarding();
   const { activeProfile } = useAuth();
   const profileId = activeProfile?.id;
+  const [wordRevealed, setWordRevealed] = useState(false);
   const progress = useProgress(profileId);
   const recommendations = useRecommendations(profileId);
   const missions = useMissionsToday(profileId);
+  const dailyWord = recommendations.data?.wordOfDay?.word ?? recommendations.data?.wearOfDay?.word;
+
+  useEffect(() => {
+    setWordRevealed(false);
+  }, [dailyWord?.id]);
 
   if (progress.isLoading) return <LoadingState label="Loading your dashboard..." />;
   if (progress.isError) return <ErrorState message="We couldn't load your dashboard." onRetry={() => progress.refetch()} />;
@@ -48,7 +55,6 @@ export function HomeScreen() {
   const xpGoal = progress.data?.level.nextXp ?? Math.max(currentXp, 2000);
   const streakCount = progress.data?.streak?.currentCount ?? 0;
   const masteredCount = progress.data?.masteredCount ?? 0;
-  const dailyWord = recommendations.data?.wordOfDay?.word ?? recommendations.data?.wearOfDay?.word;
   const missionList = missions.data ?? [];
   const todayLabel = new Date().toLocaleDateString(undefined, { day: "2-digit", month: "short" }).toUpperCase();
   const lexTip = dailyWord
@@ -121,7 +127,7 @@ export function HomeScreen() {
         {/* Daily Discovery */}
         <SectionTitle label="Daily Discovery" action="View History" onAction={() => navigation.navigate("LearningHistory")} />
 
-        <View style={styles.discoveryCard}>
+        <View style={[styles.discoveryCard, !wordRevealed && styles.discoveryCardMystery]}>
           {/* Editorial masthead — brand-owned, no stock photo */}
           <LinearGradient
             colors={[colors.primaryContainer, colors.primary, colors.accentOrange]}
@@ -130,24 +136,24 @@ export function HomeScreen() {
             style={styles.discoveryMasthead}
           >
             <Text style={styles.decorLetter} numberOfLines={1} adjustsFontSizeToFit>
-              {dailyWord?.text?.[0]?.toUpperCase() ?? "W"}
+              {wordRevealed ? dailyWord?.text?.[0]?.toUpperCase() ?? "W" : "?"}
             </Text>
             <View style={styles.mastheadChip}>
-              <Text style={styles.mastheadChipText}>WORD OF THE DAY</Text>
+              <Text style={styles.mastheadChipText}>{wordRevealed ? "WORD OF THE DAY" : "TODAY'S DISCOVERY"}</Text>
             </View>
           </LinearGradient>
 
           <View style={styles.discoveryBody}>
             <View style={styles.wordHeader}>
               <View style={{ flex: 1 }}>
-                <Text style={styles.word}>{dailyWord?.text ?? "Pick a goal"}</Text>
+                <Text style={styles.word}>{wordRevealed ? dailyWord?.text ?? "Pick a goal" : "Ready to reveal?"}</Text>
                 <Text style={styles.phonetic}>
-                  {dailyWord
+                  {wordRevealed && dailyWord
                     ? `${dailyWord.content?.phonetic ? `/${dailyWord.content.phonetic}/ · ` : ""}${dailyWord.partOfSpeech ?? ""}`
-                    : "Choose a learning pack to get started"}
+                    : dailyWord ? "One tap starts today's word" : "Choose a learning pack to get started"}
                 </Text>
               </View>
-              {dailyWord ? (
+              {dailyWord && wordRevealed ? (
                 <Pressable style={styles.soundButton} onPress={playDailyWord}>
                   <Ionicons name="volume-high" size={20} color={colors.primary} />
                 </Pressable>
@@ -155,10 +161,12 @@ export function HomeScreen() {
             </View>
 
             <Text style={styles.definition}>
-              {dailyWord?.content?.shortDefinition ?? "Pick a learning goal to unlock your first word of the day."}
+              {wordRevealed
+                ? dailyWord?.content?.shortDefinition ?? "Pick a learning goal to unlock your first word of the day."
+                : "Lex has one word segment ready for you. Reveal it, practice once, and keep your streak moving."}
             </Text>
 
-            {dailyWord?.examples?.[0] ? (
+            {wordRevealed && dailyWord?.examples?.[0] ? (
               <View style={styles.exampleRow}>
                 <View style={styles.exampleBar} />
                 <Text style={styles.exampleText} numberOfLines={2}>{dailyWord.examples[0].exampleText}</Text>
@@ -167,10 +175,22 @@ export function HomeScreen() {
 
             <Pressable
               style={styles.primaryButton}
-              onPress={() => (dailyWord ? navigation.navigate("WordDetail", { wordId: dailyWord.id }) : navigation.navigate("PracticeHub"))}
+              onPress={() => {
+                if (!dailyWord) {
+                  navigation.navigate("PracticeHub");
+                  return;
+                }
+                if (!wordRevealed) {
+                  haptics.celebrate();
+                  setWordRevealed(true);
+                  trackScreenEvent("daily_word_revealed", { wordId: dailyWord.id, word: dailyWord.text }, profileId);
+                  return;
+                }
+                navigation.navigate("WordDetail", { wordId: dailyWord.id });
+              }}
             >
-              <Ionicons name="school-outline" size={18} color={colors.white} />
-              <Text style={styles.primaryButtonText}>{dailyWord ? "Practice Now" : "Choose a Pack"}</Text>
+              <Ionicons name={wordRevealed ? "school-outline" : "gift-outline"} size={18} color={colors.white} />
+              <Text style={styles.primaryButtonText}>{dailyWord ? wordRevealed ? "Practice Now" : "Reveal Today's Word" : "Choose a Pack"}</Text>
             </Pressable>
           </View>
         </View>
@@ -338,6 +358,7 @@ function createStyles(colors: ReturnType<typeof useColors>) {
 
   // Discovery card
   discoveryCard: { borderRadius: 28, overflow: "hidden", backgroundColor: colors.cardSolid, borderWidth: 1, borderColor: colors.border, ...shadow.card },
+  discoveryCardMystery: { borderColor: colors.borderStrong },
   discoveryMasthead: { height: 160, justifyContent: "flex-end", padding: 20, overflow: "hidden" },
   decorLetter: { position: "absolute", top: -12, right: 16, fontSize: 160, lineHeight: 200, fontFamily: "Sora_700Bold", color: "rgba(255,255,255,0.10)" },
   mastheadChip: { alignSelf: "flex-start", backgroundColor: "rgba(255,255,255,0.18)", borderColor: "rgba(255,255,255,0.28)", borderWidth: 1, borderRadius: radius.pill, paddingHorizontal: 12, paddingVertical: 5 },

@@ -4,9 +4,9 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Ionicons } from "@expo/vector-icons";
 import { HomeScreen } from "../screens/home/HomeScreen";
 import { ScannerScreen } from "../screens/scanner/ScannerScreen";
-import { ProgressDashboardScreen } from "../screens/progress/ProgressDashboardScreen";
 import { ProfileScreen } from "../screens/profile/ProfileScreen";
 import { LexCoachScreen } from "../screens/lex/LexCoachScreen";
+import { LexWorldScreen } from "../screens/lexworld/LexWorldScreen";
 import { haptics } from "../lib/haptics";
 import { fontFamily, radius, shadow, spacing } from "../theme";
 import { useColors } from "../context/ThemeContext";
@@ -27,7 +27,7 @@ export function MainTabs() {
       <Tab.Screen name="HomeTab" component={HomeScreen} />
       <Tab.Screen name="ScannerTab" component={ScannerScreen} />
       <Tab.Screen name="LexTab" component={LexCoachScreen} />
-      <Tab.Screen name="LexWorldTab" component={ProgressDashboardScreen} />
+      <Tab.Screen name="LexWorldTab" component={LexWorldScreen} />
       <Tab.Screen name="MeTab" component={ProfileScreen} />
     </Tab.Navigator>
   );
