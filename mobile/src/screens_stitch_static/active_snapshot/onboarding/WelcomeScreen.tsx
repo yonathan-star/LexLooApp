@@ -35,13 +35,13 @@ export function WelcomeScreen() {
           <View style={styles.badge}>
             <Text style={styles.badgeText}>PREMIUM WEARABLE LEARNING</Text>
           </View>
-          <Text style={styles.headline}>Learn. Wear. Master.</Text>
+          <Text style={styles.headline}>Meet Lex. Learn daily.</Text>
           <Text style={styles.subhead}>Master new languages naturally through the rhythm of your day.</Text>
         </View>
 
         <View style={styles.steps}>
           <WelcomeStep icon="◉" title="Choose your ring" body="Sizing kit delivered to your doorstep." />
-          <WelcomeStep icon="◌" title="Wear it daily" body="Lightweight, waterproof, and zero charging." />
+          <WelcomeStep icon="◌" title="Build it daily" body="Each word is one segment toward something bigger." />
           <WelcomeStep icon="◇" title="Master new words" body="Contextual learning via haptic feedback." />
         </View>
       </ScrollView>

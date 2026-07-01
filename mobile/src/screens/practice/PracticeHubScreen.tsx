@@ -223,7 +223,7 @@ export function PracticeHubScreen() {
       <SafeAreaView style={styles.safe} edges={["top", "left", "right"]}>
         <EmptyState
           title="No words to practice yet"
-          message="Scan a tile or pick a learning pack to start building your practice queue."
+          message="Pick a learning pack to start building your practice queue."
           actionLabel="Browse Packs"
           onAction={() => navigation.navigate("PackLibrary")}
         />

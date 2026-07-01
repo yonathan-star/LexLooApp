@@ -23,7 +23,7 @@ export function ManualCodeEntryScreen() {
   async function submit() {
     const normalized = code.trim().toUpperCase();
     if (!normalized) {
-      setError("Enter the code printed on your LexLoo tile.");
+      setError("Enter a LexLoo code.");
       return;
     }
     if (!activeProfile) {
@@ -57,13 +57,13 @@ export function ManualCodeEntryScreen() {
             <Ionicons name="keypad" size={36} color={colors.primary} />
           </View>
           <Text style={styles.eyebrow}>Scanner</Text>
-          <Text style={styles.title}>Enter Tile Code</Text>
-          <Text style={styles.subtitle}>Type the code printed on the back of a LexLoo tile to unlock its word without using the camera.</Text>
+          <Text style={styles.title}>Enter LexLoo Code</Text>
+          <Text style={styles.subtitle}>Type a LexLoo code to unlock its word without using the camera.</Text>
         </View>
 
         <View style={styles.form}>
           <TextField
-            label="Tile code"
+            label="LexLoo code"
             value={code}
             onChangeText={(value) => setCode(value.toUpperCase())}
             placeholder="LEX1001"

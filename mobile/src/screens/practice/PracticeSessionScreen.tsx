@@ -307,7 +307,7 @@ export function PracticeSessionScreen() {
       <SafeAreaView style={styles.safe} edges={["top", "left", "right"]}>
         <EmptyState
           title="No practice word yet"
-          message="Scan a tile or choose a pack with words before starting this practice mode."
+          message="Choose a pack with words before starting this practice mode."
           actionLabel="Browse Packs"
           onAction={() => navigation.navigate("PackLibrary")}
         />

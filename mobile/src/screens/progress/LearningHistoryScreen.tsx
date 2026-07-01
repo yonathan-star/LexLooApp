@@ -21,7 +21,7 @@ export function LearningHistoryScreen() {
       title="Learning History"
       subtitle="A timeline of scans, saved words, quizzes, and mastery moments from your LexLoo loop."
       medallion={`${events.length}`}
-      rows={(events.length ? events.slice(0, 12) : [{ type: "empty", label: "No learning events yet", at: "Scan a tile to begin" }]).map((event, index) => ({
+      rows={(events.length ? events.slice(0, 12) : [{ type: "empty", label: "No learning events yet", at: "Discover a word to begin" }]).map((event, index) => ({
         label: event.label,
         value: event.at ? new Date(event.at).toLocaleDateString() : "",
         accent: index % 3 === 0 ? "blue" : index % 3 === 1 ? "orange" : "muted",

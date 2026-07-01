@@ -14,7 +14,7 @@
       "supportsTablet": true,
       "bundleIdentifier": "app.lexloo.mobile",
       "infoPlist": {
-        "NSCameraUsageDescription": "LexLoo uses your camera to scan physical LexLoo word tiles.",
+        "NSCameraUsageDescription": "LexLoo uses your camera to scan words and LexLoo codes.",
         "NSPhotoLibraryUsageDescription": "LexLoo accesses your photo library so you can set a profile picture."
       }
     },

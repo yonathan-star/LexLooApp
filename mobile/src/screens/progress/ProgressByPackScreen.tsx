@@ -20,7 +20,7 @@ export function ProgressByPackScreen() {
   if (packs.isLoading) return <LoadingState label="Loading pack progress..." />;
   if (packs.isError) return <ErrorState message="We couldn't load pack progress." onRetry={() => packs.refetch()} />;
   if (!packs.data?.length) {
-    return <EmptyState title="No pack progress yet" message="Scan and practice pack words to see module progress here." actionLabel="Browse Packs" onAction={() => navigation.navigate("PackLibrary")} />;
+    return <EmptyState title="No pack progress yet" message="Discover and practice pack words to see module progress here." actionLabel="Browse Packs" onAction={() => navigation.navigate("PackLibrary")} />;
   }
 
   return (

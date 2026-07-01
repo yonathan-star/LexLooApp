@@ -90,7 +90,7 @@ export function ScannerScreen() {
         <View style={styles.permissionCard}>
           <Ionicons name="camera-outline" size={48} color={colors.primary} />
           <Text style={styles.permissionTitle}>Smile, we need your camera</Text>
-          <Text style={styles.permissionText}>Point it at a tile and we'll do the rest.</Text>
+          <Text style={styles.permissionText}>Point it at a word or LexLoo code and we'll do the rest.</Text>
           <Button label="Allow Camera" onPress={requestPermission} style={{ marginTop: spacing.md }} />
           <Button label="Enter code manually" variant="ghost" onPress={() => navigation.navigate("ManualCodeEntry")} style={{ marginTop: spacing.sm }} />
         </View>
@@ -128,7 +128,7 @@ export function ScannerScreen() {
               size={16}
               color={status === "success" ? colors.success : status === "error" ? colors.error : colors.primary}
             />
-            <Text style={styles.analyzingText}>{status === "success" ? `Nice! Unlocked ${resultWord}` : status === "error" ? "Hmm, try again" : "Looking for a tile..."}</Text>
+            <Text style={styles.analyzingText}>{status === "success" ? `Nice! Unlocked ${resultWord}` : status === "error" ? "Hmm, try again" : "Looking for a word..."}</Text>
           </View>
           <View style={styles.scanFrame}>
             <View style={[styles.corner, styles.cornerTL]} />
@@ -142,7 +142,7 @@ export function ScannerScreen() {
         <View style={styles.helperArea}>
           <View style={styles.helperGlass}>
             <Text style={styles.helperText}>
-              {status === "error" ? "We couldn't quite read that tile. Try again or type the code instead." : "Line up the word tile inside the frame"}
+              {status === "error" ? "We couldn't quite read that. Try again or type the code instead." : "Line up a word or LexLoo code inside the frame"}
             </Text>
           </View>
           {status === "error" ? (

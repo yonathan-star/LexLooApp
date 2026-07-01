@@ -75,7 +75,7 @@ export function ScannerScreen() {
         <View style={styles.permissionCard}>
           <Text style={styles.permissionIcon}>◇</Text>
           <Text style={styles.permissionTitle}>Camera access</Text>
-          <Text style={styles.permissionText}>Align word tile within the frame to scan.</Text>
+          <Text style={styles.permissionText}>Align a word or LexLoo code within the frame to scan.</Text>
           <Button label="Allow Camera" onPress={requestPermission} style={{ marginTop: spacing.md }} />
           <Button label="Enter code manually" variant="ghost" onPress={() => navigation.navigate("ManualCodeEntry")} style={{ marginTop: spacing.sm }} />
         </View>
@@ -125,7 +125,7 @@ export function ScannerScreen() {
         <View style={styles.helperArea}>
           <View style={styles.helperGlass}>
             <Text style={styles.helperText}>
-              {status === "error" ? "We could not read that tile. Try again or enter the code manually." : "Align word tile within the frame to scan"}
+              {status === "error" ? "We could not read that. Try again or enter the code manually." : "Align a word or LexLoo code within the frame"}
             </Text>
           </View>
           {status === "error" ? (

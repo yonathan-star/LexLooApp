@@ -44,7 +44,7 @@ export function PackLibraryScreen() {
         <View style={styles.hero}>
           <Text style={styles.eyebrow}>Library</Text>
           <Text style={styles.title}>Word Packs</Text>
-          <Text style={styles.subtitle}>Choose a learning path, scan supported tiles, and practice pack vocabulary toward mastery.</Text>
+          <Text style={styles.subtitle}>Choose a learning path, discover words, and practice pack vocabulary toward mastery.</Text>
         </View>
 
         <View style={styles.list}>
@@ -74,7 +74,7 @@ function PackCard({ pack, onPress }: { pack: WordPack & { _count?: { packWords?:
           {[pack.level, pack.category, `${count} words`].filter(Boolean).join(" · ")}
         </Text>
         <Text style={styles.cardBody} numberOfLines={2}>
-          {pack.description ?? "A LexLoo vocabulary pack for daily scan, learn, and practice."}
+          {pack.description ?? "A LexLoo vocabulary pack for daily discovery, practice, and mastery."}
         </Text>
       </View>
       <View style={[styles.arrow, { backgroundColor: ps.wash }]}>

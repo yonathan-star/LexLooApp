@@ -10,7 +10,7 @@ export function HelpCenterScreen() {
       subtitle="Quick answers for scans, mastery, family safety, and account support."
       medallion="?"
       rows={[
-        { label: "My tile will not scan", value: "Use manual code entry", accent: "blue" },
+        { label: "My scan will not work", value: "Use manual code entry", accent: "blue" },
         { label: "How mastery works", value: "Repeated practice wins", accent: "orange" },
         { label: "Child safety", value: "No public chat or leaderboards", accent: "muted" },
       ]}
