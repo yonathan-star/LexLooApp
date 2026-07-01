@@ -21,7 +21,7 @@ interface AuthContextValue extends AuthState {
     displayName: string;
     role: "student" | "parent" | "adult_learner";
   }) => Promise<{ mfaRequired: true; challengeId: string; deliveryTarget: string; devCode?: string }>;
-  verifyRegistration: (challengeId: string, code: string) => Promise<void>;
+  verifyRegistration: (challengeId: string, code: string) => Promise<{ token: string; user: User; profiles: Profile[] }>;
   logout: () => Promise<void>;
   setActiveProfile: (profile: Profile) => void;
   refreshProfiles: () => Promise<void>;
@@ -71,6 +71,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setActiveProfileState(result.profiles[0]);
       setIsOnboarded(profileIsOnboarded(result.profiles[0]));
     }
+    return result;
   }, []);
 
   const login = useCallback(async (email: string, password: string) => {
@@ -107,7 +108,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         body: { challengeId, code },
         auth: false,
       });
-    await applySession(result);
+    return applySession(result);
   }, [applySession]);
 
   const logout = useCallback(async () => {

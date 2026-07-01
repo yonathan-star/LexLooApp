@@ -6,6 +6,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { LexLooMark } from "../../components/LexLooMark";
 import { LexMascot } from "../../components/LexMascot";
 import { TextField } from "../../components/TextField";
+import { useUpdateProfile } from "../../api/queries";
 import { useAuth } from "../../context/AuthContext";
 import { fontFamily, fontSize, glow, radius, shadow, spacing } from "../../theme";
 import { useColors } from "../../context/ThemeContext";
@@ -13,12 +14,23 @@ import { useColors } from "../../context/ThemeContext";
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 type Role = "student" | "parent" | "adult_learner";
 
+function packSlugForOnboarding(onboarding?: { language?: string; goal?: string; dailyGoal?: string }) {
+  if (!onboarding) return undefined;
+  if (onboarding.language === "Spanish") return "spanish-beginner";
+  if (onboarding.language === "Hebrew") return "hebrew-beginner";
+  if (onboarding.goal === "Learn a new language") return "spanish-beginner";
+  if (onboarding.goal === "Work") return "sat-advanced";
+  return "english-grade-7";
+}
+
 export function CreateAccountScreen() {
   const colors = useColors();
   const styles = useMemo(() => createStyles(colors), [colors]);
   const navigation = useNavigation<any>();
   const route = useRoute<any>();
-  const { register, verifyRegistration } = useAuth();
+  const { register, verifyRegistration, refreshProfiles, markOnboarded } = useAuth();
+  const updateProfile = useUpdateProfile();
+  const onboarding = route.params?.onboarding as { language?: string; goal?: string; dailyGoal?: string } | undefined;
   const [displayName, setDisplayName] = useState(route.params?.displayName ?? "");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -67,7 +79,14 @@ export function CreateAccountScreen() {
     }
     setSubmitting(true);
     try {
-      await verifyRegistration(challenge.challengeId, code.trim());
+      const result = await verifyRegistration(challenge.challengeId, code.trim());
+      const activeProfile = result.profiles[0];
+      const activeGoalId = packSlugForOnboarding(onboarding);
+      if (activeProfile?.id && activeGoalId) {
+        await updateProfile.mutateAsync({ profileId: activeProfile.id, activeGoalId });
+        await refreshProfiles();
+        markOnboarded();
+      }
     } catch (error: any) {
       Alert.alert("Invalid code", error?.message ?? "That verification code did not work.");
     } finally {
