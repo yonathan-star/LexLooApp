@@ -77,7 +77,7 @@ export function HomeScreen() {
 
   return (
     <SafeAreaView style={styles.safe} edges={["top", "left", "right"]}>
-      <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
+      <ScrollView style={styles.tabAwareScroll} contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
 
         {/* Top bar */}
         <View style={styles.topBar}>
@@ -315,7 +315,8 @@ function createStyles(colors: ReturnType<typeof useColors>) {
   return StyleSheet.create({
 
   safe: { flex: 1, backgroundColor: colors.background },
-  content: { paddingHorizontal: spacing.safeMargin, paddingBottom: 132, paddingTop: spacing.md, gap: spacing.sm },
+  tabAwareScroll: { marginBottom: 104 },
+  content: { paddingHorizontal: spacing.safeMargin, paddingBottom: 240, paddingTop: spacing.md, gap: spacing.sm },
 
   // Top bar
   topBar: { flexDirection: "row", alignItems: "center", justifyContent: "space-between", paddingBottom: spacing.xs },

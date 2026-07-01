@@ -33,7 +33,7 @@ export function LexWorldScreen() {
 
   return (
     <SafeAreaView style={styles.safe} edges={["top", "left", "right"]}>
-      <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
+      <ScrollView style={styles.tabAwareScroll} contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
         <View style={styles.topBar}>
           <View style={styles.brandRow}>
             <ProfileAvatar />
@@ -176,7 +176,8 @@ function PackProgress({ name, percent, onPress }: { name: string; percent: numbe
 function createStyles(colors: ReturnType<typeof useColors>) {
   return StyleSheet.create({
     safe: { flex: 1, backgroundColor: colors.background },
-    content: { paddingHorizontal: spacing.safeMargin, paddingTop: spacing.md, paddingBottom: 132, gap: spacing.lg },
+    tabAwareScroll: { marginBottom: 104 },
+    content: { paddingHorizontal: spacing.safeMargin, paddingTop: spacing.md, paddingBottom: 240, gap: spacing.lg },
     topBar: { flexDirection: "row", alignItems: "center", justifyContent: "space-between" },
     brandRow: { flexDirection: "row", alignItems: "center", gap: spacing.sm },
     streakPill: { flexDirection: "row", alignItems: "center", gap: 6, backgroundColor: colors.primaryWash, borderRadius: radius.pill, paddingHorizontal: spacing.sm, paddingVertical: 8 },
