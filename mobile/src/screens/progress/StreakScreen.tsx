@@ -26,7 +26,7 @@ export function StreakScreen() {
     <LuminousNativeScreen
       eyebrow="Habit"
       title={`${current}-Day Streak`}
-      subtitle="Keep the daily scan, learn, and practice loop alive to build lasting vocabulary mastery."
+      subtitle="Keep the daily discover, learn, and practice loop alive to build lasting vocabulary mastery."
       medallion={`${current}`}
       streakLabel={`${current} Streak`}
       rows={[
@@ -35,7 +35,7 @@ export function StreakScreen() {
         { label: "Last active", value: streak.data?.lastActiveDate ? new Date(streak.data.lastActiveDate).toLocaleDateString() : "Not yet", accent: "muted", icon: "calendar-outline" },
         ...missionRows,
       ]}
-      primaryLabel="Scan Tile"
+      primaryLabel="Scan a Word"
       secondaryLabel="Practice"
       onPrimary={() => navigation.navigate("ScannerTab")}
       onSecondary={() => navigation.navigate("PracticeHub")}
