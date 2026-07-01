@@ -5,17 +5,22 @@ import { LuminousNativeScreen } from "../stitch/LuminousNativeScreen";
 export function FeatureComingSoonScreen() {
   const navigation = useNavigation<any>();
   const route = useRoute<any>();
-  const featureName = route.params?.featureName ?? "This feature";
+  const featureName = route.params?.featureName ?? "This area";
 
   return (
     <LuminousNativeScreen
       eyebrow="Roadmap"
-      title={`${featureName} is coming soon`}
-      subtitle="This part of LexLoo is still being polished for a future release."
+      title={`${featureName} is on the roadmap`}
+      subtitle="Keep learning from LexWorld, daily practice, and Lex while this area is shaped around the core word habit."
       medallion="✦"
-      rows={[{ label: "Status", value: "In progress", accent: "blue" }]}
-      primaryLabel="Back"
-      onPrimary={() => navigation.goBack()}
+      rows={[
+        { label: "Learn now", value: "LexWorld", accent: "blue" },
+        { label: "Coach", value: "Ask Lex", accent: "orange" },
+      ]}
+      primaryLabel="Open LexWorld"
+      secondaryLabel="Ask Lex"
+      onPrimary={() => navigation.navigate("LexWorldTab")}
+      onSecondary={() => navigation.navigate("LexTab")}
     />
   );
 }

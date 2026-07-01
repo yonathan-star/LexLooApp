@@ -84,7 +84,7 @@ export function HomeScreen() {
 
         <Text style={styles.sectionTitle}>Daily Missions</Text>
         <View style={styles.missionStack}>
-          <MissionRow icon="◇" title="Scan 5 Environment Items" progress="3/5" reward="+50 XP" percent="60%" accent={colors.accentOrange} />
+          <MissionRow icon="◇" title="Scan 1 LexLoo Code" progress="0/1" reward="+10 XP" percent="0%" accent={colors.accentOrange} />
           <MissionRow icon="◎" title="Master 3 New Words" progress="1/3" reward="+120 XP" percent="33%" accent={colors.primary} />
           <MissionRow icon="✓" title="Listen to 1 Audio Story" progress="Done" reward="" percent="100%" accent={colors.success} done />
         </View>
