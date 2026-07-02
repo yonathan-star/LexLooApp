@@ -22,10 +22,14 @@ practiceRouter.get("/quiz-options/:wordId", requireAuth, async (req, res) => {
     include: { content: true },
     take: 20,
   });
-  const shuffled = distractors.sort(() => Math.random() - 0.5).slice(0, 3);
-  const options = [word, ...shuffled]
-    .map((w) => ({ wordId: w.id, text: w.content?.shortDefinition ?? w.text }))
-    .sort(() => Math.random() - 0.5);
+  const optionMap = new Map<string, { wordId: string; text: string }>();
+  for (const candidate of [word, ...distractors.sort(() => Math.random() - 0.5)]) {
+    const text = candidate.content?.shortDefinition?.trim() || candidate.text;
+    const dedupeKey = text.toLowerCase();
+    if (!optionMap.has(dedupeKey)) optionMap.set(dedupeKey, { wordId: candidate.id, text });
+    if (optionMap.size >= 4) break;
+  }
+  const options = [...optionMap.values()].sort(() => Math.random() - 0.5);
 
   return ok(res, { prompt: word.text, correctWordId: word.id, options });
 });
@@ -94,7 +98,7 @@ practiceRouter.patch("/sessions/:id/complete", requireAuth, async (req, res) => 
     return ok(res, { session, newBadges });
   }
 
-  const xpAwarded = Math.max(5, Math.round(parsed.data.score / 2));
+  const xpAwarded = Math.max(5, Math.min(25, Math.round(parsed.data.score / 5)));
 
   const updated = await prisma.quizSession.update({
     where: { id: session.id },

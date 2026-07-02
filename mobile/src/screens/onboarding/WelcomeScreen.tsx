@@ -26,7 +26,7 @@ export function WelcomeScreen() {
           <View style={styles.glow} />
           <View style={styles.orbitLarge} />
           <View style={styles.orbitSmall} />
-          <LexMascot size={168} mood="celebrate" />
+          <LexMascot size={168} mood="welcome" />
           <View style={styles.dataPill}>
             <Ionicons name="sparkles" size={14} color={colors.primary} />
             <Text style={styles.dataText}>Daily Word Ready</Text>

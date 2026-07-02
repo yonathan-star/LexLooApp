@@ -34,10 +34,10 @@ export function ProfileScreen() {
         { label: "Words mastered", value: `${progress.data?.masteredCount ?? 0}`, accent: "muted", icon: "trophy" },
         { label: "Saved words", value: `${progress.data?.savedCount ?? 0}`, accent: "blue", icon: "bookmark" },
       ]}
-      primaryLabel="Edit Profile"
-      secondaryLabel="Invites"
-      onPrimary={() => navigation.navigate("EditProfile")}
-      onSecondary={() => navigation.navigate("FamilyInvites")}
+      primaryLabel="Settings"
+      secondaryLabel="Edit Profile"
+      onPrimary={() => navigation.navigate("Settings")}
+      onSecondary={() => navigation.navigate("EditProfile")}
       avoidFloatingTabBar
     />
   );

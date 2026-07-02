@@ -76,7 +76,7 @@ export function PreAccountOnboardingScreen() {
 
       <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
         <View style={styles.mascotWrap}>
-          <LexMascot mood={step === 4 ? "celebrate" : "happy"} />
+          <LexMascot mood={step === 4 ? "celebrate" : step === 1 ? "thinking" : "coach"} />
         </View>
 
         {step === 0 ? (

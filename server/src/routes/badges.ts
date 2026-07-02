@@ -8,6 +8,12 @@ import { writeAudit } from "../services/audit";
 
 export const badgesRouter = Router();
 
+const BADGE_COPY: Record<string, { description: string; requirementJson: string }> = {
+  quiz_champion: { description: "Completed 3 practice sessions.", requirementJson: JSON.stringify({ type: "quiz_complete", count: 3 }) },
+  quiz_regular: { description: "Completed 10 practice sessions.", requirementJson: JSON.stringify({ type: "quiz_complete", count: 10 }) },
+  quiz_veteran: { description: "Completed 25 practice sessions.", requirementJson: JSON.stringify({ type: "quiz_complete", count: 25 }) },
+};
+
 // Screen 45: Achievements — unlocked + locked badges with requirements shown.
 badgesRouter.get("/", requireAuth, async (req, res) => {
   const profileId = req.query.profileId as string;
@@ -24,6 +30,7 @@ badgesRouter.get("/", requireAuth, async (req, res) => {
     res,
     allBadges.map((b) => ({
       ...b,
+      ...(BADGE_COPY[b.code] ?? {}),
       earned: earnedMap.has(b.id),
       earnedAt: earnedMap.get(b.id) ?? null,
     }))

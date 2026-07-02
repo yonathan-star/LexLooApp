@@ -58,7 +58,7 @@ export function LexCoachScreen() {
         </View>
 
         <View style={styles.hero}>
-          <LexMascot size={138} mood="celebrate" />
+          <LexMascot size={138} mood="coach" />
           <Text style={styles.eyebrow}>Meet Lex</Text>
           <Text style={styles.title}>Your next word segment is ready.</Text>
           <Text style={styles.subtitle}>
@@ -90,7 +90,7 @@ export function LexCoachScreen() {
             icon="scan"
             title="Scan"
             body="Find a LexLoo code and unlock another segment."
-            onPress={() => navigation.navigate("ScannerTab")}
+            onPress={() => navigation.navigate("Main", { screen: "ScannerTab" })}
           />
           <CoachAction
             icon="bookmark"
@@ -99,10 +99,10 @@ export function LexCoachScreen() {
             onPress={() => navigation.navigate("SavedWords")}
           />
           <CoachAction
-            icon="trophy"
-            title="Mission"
-            body={mission ? `${mission.title}: ${Math.min(mission.current, mission.target)}/${mission.target}` : "Finish one small action to earn XP."}
-            onPress={() => navigation.navigate("PracticeHub")}
+            icon="chatbubble-ellipses"
+            title="Ask Lex"
+            body={mission ? `Ask for help with ${dailyWord.text} or your next mission.` : "Get a hint, example, or next step."}
+            onPress={() => navigation.navigate("AskLex", { wordId: dailyWord.id })}
           />
         </View>
       </ScrollView>

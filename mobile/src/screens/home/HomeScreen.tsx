@@ -95,7 +95,7 @@ export function HomeScreen() {
         </View>
 
         <View style={styles.coachCard}>
-          <LexMascot size={96} mood={streakCount > 0 ? "celebrate" : "happy"} />
+          <LexMascot size={96} mood={streakCount > 0 ? "celebrate" : "coach"} />
           <View style={styles.coachBubble}>
             <Text style={styles.coachEyebrow}>Lex says</Text>
             <Text style={styles.coachText}>{lexTip}</Text>

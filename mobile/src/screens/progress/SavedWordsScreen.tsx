@@ -21,7 +21,7 @@ export function SavedWordsScreen() {
   if (savedWords.isLoading) return <LoadingState label="Loading saved words..." />;
   if (savedWords.isError) return <ErrorState message="We couldn't load saved words." onRetry={() => savedWords.refetch()} />;
   if (!savedWords.data?.length) {
-    return <EmptyState title="No saved words yet" message="Save words from word detail to build a review list." actionLabel="Scan a Word" onAction={() => navigation.navigate("ScannerTab")} />;
+    return <EmptyState title="No saved words yet" message="Save words from word detail to build a review list." actionLabel="Scan a Word" onAction={() => navigation.navigate("Main", { screen: "ScannerTab" })} />;
   }
 
   return (

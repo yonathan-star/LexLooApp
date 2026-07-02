@@ -120,6 +120,12 @@ interface BadgeRequirement {
   count?: number;
 }
 
+const BADGE_MINIMUMS: Record<string, number> = {
+  quiz_champion: 3,
+  quiz_regular: 10,
+  quiz_veteran: 25,
+};
+
 export async function evaluateBadges(profileId: string): Promise<{ code: string; name: string; id: string }[]> {
   const [badges, earned, scanCount, streak, learnedCount, masteredCount, quizCount, savedCount] = await Promise.all([
     prisma.badge.findMany({ where: { active: true } }),
@@ -158,7 +164,7 @@ export async function evaluateBadges(profileId: string): Promise<{ code: string;
         met = masteredCount >= (requirement.count ?? 100);
         break;
       case "quiz_complete":
-        met = quizCount >= (requirement.count ?? 1);
+        met = quizCount >= Math.max(requirement.count ?? 1, BADGE_MINIMUMS[badge.code] ?? 0);
         break;
       case "words_collected":
         met = savedCount >= (requirement.count ?? 10);

@@ -40,6 +40,24 @@ function shuffle<T>(items: T[]): T[] {
   return result;
 }
 
+function LessonRoad({ current, total, correctCount }: { current: number; total: number; correctCount: number }) {
+  const colors = useColors();
+  const styles = useMemo(() => createStyles(colors), [colors]);
+  const count = Math.max(1, total);
+  return (
+    <View>
+      <View style={styles.road}>
+        {Array.from({ length: count }).map((_, index) => (
+          <View key={index} style={[styles.roadDot, index < current && styles.roadDotDone, index === current && styles.roadDotCurrent]} />
+        ))}
+      </View>
+      <Text style={styles.roadMeta}>
+        {current + 1}/{count} · {correctCount} correct
+      </Text>
+    </View>
+  );
+}
+
 export function PracticeSessionScreen() {
   const colors = useColors();
   const styles = useMemo(() => createStyles(colors), [colors]);
@@ -58,7 +76,7 @@ export function PracticeSessionScreen() {
   const [questionIndex, setQuestionIndex] = useState(0);
   const [correctCount, setCorrectCount] = useState(0);
   const practiceWords = useMemo(
-    () => (pack.data?.packWords ?? []).map((item) => item.word).filter(Boolean).slice(0, isSpelling || isMultipleChoice ? 5 : 1),
+    () => (pack.data?.packWords ?? []).map((item) => item.word).filter(Boolean).slice(0, 5),
     [isMultipleChoice, isSpelling, pack.data?.packWords]
   );
   const fallbackWord = packId ? undefined : recommendations.data?.wordOfDay?.word ?? recommendations.data?.wearOfDay?.word;
@@ -329,7 +347,14 @@ export function PracticeSessionScreen() {
               </Text>
             </View>
           </View>
-          <Text style={styles.matchHint}>Tap a word, then tap its matching definition.</Text>
+          <View style={styles.lexCoachRow}>
+            <LexMascot size={84} mood={wrongKeys ? "encourage" : selectedKey ? "thinking" : "coach"} />
+            <View style={styles.lexBubble}>
+              <Text style={styles.lexTitle}>{wrongKeys ? "Close. Try another pair." : selectedKey ? "Now find its match." : "Lex is watching the board."}</Text>
+              <Text style={styles.lexBody}>Tap a word, then tap the definition that belongs with it.</Text>
+            </View>
+          </View>
+          <Text style={styles.matchHint}>Match every pair to finish the road.</Text>
           <View style={styles.matchGrid}>
             {tiles.map((tile) => {
               const matched = matchedIds.has(tile.pairId);
@@ -393,6 +418,20 @@ export function PracticeSessionScreen() {
           <LexLooMark />
           <View style={styles.pill}>
             <Text style={styles.pillText}>{sessionTotal > 1 ? `${questionIndex + 1}/${sessionTotal}` : modeLabel}</Text>
+          </View>
+        </View>
+
+        <LessonRoad current={questionIndex} total={sessionTotal} correctCount={correctCount} />
+
+        <View style={styles.lexCoachRow}>
+          <LexMascot size={84} mood={feedback ? feedback.isCorrect ? "correct" : "encourage" : isSpelling || isMultipleChoice ? "thinking" : "coach"} />
+          <View style={styles.lexBubble}>
+            <Text style={styles.lexTitle}>
+              {feedback ? feedback.isCorrect ? "That one stuck." : "No stress. Learn from it." : isSpelling ? "Type it from memory." : isMultipleChoice ? "Pick the meaning." : "Flip it, then be honest."}
+            </Text>
+            <Text style={styles.lexBody}>
+              {feedback ? feedback.isCorrect ? "Keep the streak of focus going." : "The correction matters more than the miss." : "Every answer is one segment closer."}
+            </Text>
           </View>
         </View>
 
@@ -483,7 +522,7 @@ export function PracticeSessionScreen() {
         ) : null}
         {feedback ? (
           <View style={[styles.feedbackCard, feedback.isCorrect ? styles.feedbackCorrect : styles.feedbackWrong]}>
-            <LexMascot size={76} mood={feedback.isCorrect ? "celebrate" : "happy"} />
+            <LexMascot size={76} mood={feedback.isCorrect ? "correct" : "encourage"} />
             <View style={styles.feedbackCopy}>
               <Text style={[styles.feedbackTitle, { color: feedback.isCorrect ? colors.success : colors.error }]}>
                 {feedback.isCorrect ? "Nice!" : "Not quite"}
@@ -514,6 +553,25 @@ function createStyles(colors: ReturnType<typeof useColors>) {
   logo: { color: colors.primary, fontFamily: fontFamily.display, fontSize: fontSize.display, lineHeight: 38 },
   pill: { backgroundColor: colors.orangeWash, borderRadius: radius.pill, paddingHorizontal: spacing.sm, paddingVertical: 8 },
   pillText: { color: colors.accentOrangePressed, fontFamily: fontFamily.bodyBold, fontSize: 12 },
+  road: { flexDirection: "row", alignItems: "center", gap: 6 },
+  roadDot: { flex: 1, height: 9, borderRadius: 5, backgroundColor: colors.cardHighest, overflow: "hidden" },
+  roadDotDone: { backgroundColor: colors.success },
+  roadDotCurrent: { backgroundColor: colors.primary },
+  roadMeta: { color: colors.textSecondary, fontFamily: fontFamily.mono, fontSize: 11, textAlign: "center", marginTop: 8 },
+  lexCoachRow: {
+    borderRadius: 24,
+    backgroundColor: colors.card,
+    borderWidth: 1,
+    borderColor: colors.border,
+    padding: spacing.md,
+    flexDirection: "row",
+    alignItems: "center",
+    gap: spacing.md,
+    ...shadow.card,
+  },
+  lexBubble: { flex: 1 },
+  lexTitle: { color: colors.textPrimary, fontFamily: fontFamily.headline, fontSize: 16, lineHeight: 22 },
+  lexBody: { color: colors.textSecondary, fontFamily: fontFamily.bodyBold, fontSize: 12, lineHeight: 18, marginTop: 4 },
   matchHint: { color: colors.textSecondary, fontFamily: fontFamily.body, fontSize: 14, textAlign: "center" },
   matchGrid: { flexDirection: "row", flexWrap: "wrap", justifyContent: "space-between" },
   matchTile: {

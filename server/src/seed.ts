@@ -142,9 +142,9 @@ const BADGES = [
   { code: "words_mastered_50", name: "Elite Recall", description: "Mastered 50 words.", requirement: { type: "words_mastered", count: 50 } },
   { code: "words_mastered_100", name: "100 Words Mastered", description: "Mastered 100 words.", requirement: { type: "words_mastered", count: 100 } },
   // Quiz milestones
-  { code: "quiz_champion", name: "Quiz Champion", description: "Completed your first quiz.", requirement: { type: "quiz_complete", count: 1 } },
-  { code: "quiz_regular", name: "Quiz Regular", description: "Completed 5 quizzes.", requirement: { type: "quiz_complete", count: 5 } },
-  { code: "quiz_veteran", name: "Quiz Veteran", description: "Completed 10 quizzes.", requirement: { type: "quiz_complete", count: 10 } },
+  { code: "quiz_champion", name: "Quiz Champion", description: "Completed 3 practice sessions.", requirement: { type: "quiz_complete", count: 3 } },
+  { code: "quiz_regular", name: "Quiz Regular", description: "Completed 10 practice sessions.", requirement: { type: "quiz_complete", count: 10 } },
+  { code: "quiz_veteran", name: "Quiz Veteran", description: "Completed 25 practice sessions.", requirement: { type: "quiz_complete", count: 25 } },
   // Word collecting milestones
   { code: "word_collector", name: "Word Collector", description: "Saved 10 words to your collection.", requirement: { type: "words_collected", count: 10 } },
   { code: "word_hoarder", name: "Avid Collector", description: "Saved 25 words to your collection.", requirement: { type: "words_collected", count: 25 } },
@@ -445,7 +445,7 @@ async function main() {
   for (const b of BADGES) {
     await prisma.badge.upsert({
       where: { code: b.code },
-      update: {},
+      update: { name: b.name, description: b.description, requirementJson: JSON.stringify(b.requirement) },
       create: { code: b.code, name: b.name, description: b.description, requirementJson: JSON.stringify(b.requirement) },
     });
   }

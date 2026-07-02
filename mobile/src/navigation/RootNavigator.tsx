@@ -26,6 +26,7 @@ import { LevelsScreen } from "../screens/progress/LevelsScreen";
 import { XpLedgerScreen } from "../screens/progress/XpLedgerScreen";
 import { StreakScreen } from "../screens/progress/StreakScreen";
 import { ProfileScreen } from "../screens/profile/ProfileScreen";
+import { AskLexScreen } from "../screens/lex/AskLexScreen";
 import { EditProfileScreen } from "../screens/profile/EditProfileScreen";
 import { SettingsScreen } from "../screens/profile/SettingsScreen";
 import { NotificationsSettingsScreen } from "../screens/profile/NotificationsSettingsScreen";
@@ -93,6 +94,7 @@ function SharedScreenList() {
       <Stack.Screen name="XpLedger" component={XpLedgerScreen} options={{ title: "XP Ledger" }} />
       <Stack.Screen name="Streak" component={StreakScreen} options={{ title: "Streak" }} />
       <Stack.Screen name="Profile" component={ProfileScreen} options={{ title: "Profile" }} />
+      <Stack.Screen name="AskLex" component={AskLexScreen} options={{ title: "Ask Lex" }} />
       <Stack.Screen name="EditProfile" component={EditProfileScreen} options={{ title: "Edit Profile" }} />
       <Stack.Screen name="Settings" component={SettingsScreen} options={{ title: "Settings" }} />
       <Stack.Screen name="NotificationsSettings" component={NotificationsSettingsScreen} options={{ title: "Notifications" }} />

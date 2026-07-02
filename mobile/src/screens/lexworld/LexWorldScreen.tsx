@@ -60,7 +60,7 @@ export function LexWorldScreen() {
           <WorldAction icon="bookmark" title="Saved Words" body="Search and review your collection." onPress={() => navigation.navigate("SavedWords")} />
           <WorldAction icon="albums" title="Learn Packs" body="Choose Daily, School, Fun, or Challenge words." onPress={() => navigation.navigate("PackLibrary")} />
           <WorldAction icon="game-controller" title="Games" body="Quiz, match, spell, and build sentences." onPress={() => navigation.navigate("PracticeSetup")} />
-          <WorldAction icon="sparkles" title="Ask Lex" body="Open your vocabulary coach." onPress={() => navigation.navigate("LexTab")} />
+          <WorldAction icon="sparkles" title="Ask Lex" body="Ask for hints, examples, and what to practice next." onPress={() => navigation.navigate("AskLex")} />
         </View>
 
         <View style={styles.rankCard}>

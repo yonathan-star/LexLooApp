@@ -108,7 +108,7 @@ export function CreateAccountScreen() {
         </View>
 
         <View style={styles.hero}>
-          {!challenge ? <LexMascot size={92} mood="celebrate" /> : null}
+          {!challenge ? <LexMascot size={92} mood="welcome" /> : null}
           <Text style={styles.eyebrow}>{challenge ? "Verification" : "Meet Lex"}</Text>
           <Text style={styles.title}>{challenge ? "Enter your verification code" : "Peel your potential."}</Text>
           <Text style={styles.subtitle}>

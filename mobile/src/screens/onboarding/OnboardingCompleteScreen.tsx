@@ -25,7 +25,7 @@ export function OnboardingCompleteScreen() {
       <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
         <LexLooMark />
         <View style={styles.hero}>
-          <LexMascot size={116} mood="celebrate" />
+          <LexMascot size={116} mood="coach" />
           <Text style={styles.eyebrow}>You're all set</Text>
           <Text style={styles.title}>Let's discover your first word.</Text>
           <Text style={styles.subtitle}>Each word is one segment. Keep stacking them and your LexWorld grows.</Text>
