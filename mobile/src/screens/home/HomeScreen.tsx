@@ -56,6 +56,8 @@ export function HomeScreen() {
   const streakCount = progress.data?.streak?.currentCount ?? 0;
   const masteredCount = progress.data?.masteredCount ?? 0;
   const missionList = missions.data ?? [];
+  const activeMissions = missionList.filter((mission) => !mission.completed).slice(0, 2);
+  const completedMissionCount = missionList.filter((mission) => mission.completed).length;
   const todayLabel = new Date().toLocaleDateString(undefined, { day: "2-digit", month: "short" }).toUpperCase();
   const lexTip = dailyWord
     ? `Lex picked "${dailyWord.text}" for today's segment. Practice it once to keep your streak warm.`
@@ -196,25 +198,32 @@ export function HomeScreen() {
         </View>
 
         {/* Daily Missions */}
-        <SectionTitle label="Daily Missions" />
+        <SectionTitle label="Next Moves" />
         <View style={styles.missionStack}>
-          {missionList.length ? (
-            missionList.map((mission: Mission) => (
+          {activeMissions.length ? (
+            activeMissions.map((mission: Mission) => (
               <MissionRow
                 key={mission.id}
-                icon={mission.completed ? "checkmark-circle" : mission.code.includes("scan") ? "scan-outline" : "school-outline"}
+                icon={mission.code.includes("scan") ? "scan-outline" : mission.code.includes("saved") ? "bookmark-outline" : "school-outline"}
                 title={mission.title}
-                progress={mission.completed ? "Done" : `${Math.min(mission.current, mission.target)}/${mission.target}`}
-                reward={mission.completed ? "" : `+${mission.xpReward} XP`}
+                progress={`${Math.min(mission.current, mission.target)}/${mission.target}`}
+                reward={`+${mission.xpReward} XP`}
                 percent={`${Math.min(100, Math.round((mission.current / Math.max(mission.target, 1)) * 100))}%`}
-                accent={mission.completed ? colors.success : mission.code.includes("scan") ? colors.accentOrange : colors.primary}
-                done={mission.completed}
+                accent={mission.code.includes("scan") ? colors.accentOrange : colors.primary}
               />
             ))
+          ) : missionList.length ? (
+            <View style={styles.missionsQuietCard}>
+              <Ionicons name="checkmark-circle" size={22} color={colors.success} />
+              <View style={{ flex: 1 }}>
+                <Text style={styles.missionsQuietTitle}>Today is clear</Text>
+                <Text style={styles.missionsQuietBody}>{completedMissionCount} focus {completedMissionCount === 1 ? "move" : "moves"} finished. Practice only if you want another rep.</Text>
+              </View>
+            </View>
           ) : (
             <>
               <MissionRow icon="scan-outline" title="Scan 1 LexLoo Code" progress="0/1" reward="+10 XP" percent="0%" accent={colors.accentOrange} />
-              <MissionRow icon="school-outline" title="Master 3 New Words" progress="0/3" reward="+120 XP" percent="0%" accent={colors.primary} />
+              <MissionRow icon="school-outline" title="Practice 1 word" progress="0/1" reward="+10 XP" percent="0%" accent={colors.primary} />
             </>
           )}
         </View>
@@ -378,6 +387,9 @@ function createStyles(colors: ReturnType<typeof useColors>) {
 
   // Missions
   missionStack: { gap: spacing.sm, marginBottom: spacing.lg },
+  missionsQuietCard: { flexDirection: "row", alignItems: "center", gap: spacing.md, backgroundColor: colors.card, borderWidth: 1, borderColor: colors.border, borderRadius: 18, padding: spacing.md, ...shadow.card },
+  missionsQuietTitle: { color: colors.textPrimary, fontFamily: fontFamily.headline, fontSize: 15 },
+  missionsQuietBody: { color: colors.textSecondary, fontFamily: fontFamily.body, fontSize: 13, lineHeight: 19, marginTop: 3 },
   missionCard: { flexDirection: "row", alignItems: "center", gap: spacing.sm, backgroundColor: colors.card, borderWidth: 1, borderColor: colors.border, borderRadius: 18, padding: spacing.md, ...shadow.card },
   doneMission: { opacity: 0.72 },
   missionCheckbox: { width: 36, height: 36, borderRadius: 10, borderWidth: 1.5, borderColor: colors.border, alignItems: "center", justifyContent: "center", backgroundColor: colors.background, flexShrink: 0 },

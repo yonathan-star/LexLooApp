@@ -5,7 +5,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { HomeScreen } from "../screens/home/HomeScreen";
 import { ScannerScreen } from "../screens/scanner/ScannerScreen";
 import { ProfileScreen } from "../screens/profile/ProfileScreen";
-import { LexCoachScreen } from "../screens/lex/LexCoachScreen";
+import { AskLexScreen } from "../screens/lex/AskLexScreen";
 import { LexWorldScreen } from "../screens/lexworld/LexWorldScreen";
 import { haptics } from "../lib/haptics";
 import { fontFamily, radius, shadow, spacing } from "../theme";
@@ -16,7 +16,7 @@ const Tab = createBottomTabNavigator();
 const TAB_META: Record<string, { label: string; icon: keyof typeof Ionicons.glyphMap; activeIcon: keyof typeof Ionicons.glyphMap }> = {
   HomeTab: { label: "Home", icon: "home-outline", activeIcon: "home" },
   ScannerTab: { label: "Scan", icon: "scan-outline", activeIcon: "scan" },
-  LexTab: { label: "Lex", icon: "sparkles-outline", activeIcon: "sparkles" },
+  LexTab: { label: "Ask Lex", icon: "chatbubble-ellipses-outline", activeIcon: "chatbubble-ellipses" },
   LexWorldTab: { label: "LexWorld", icon: "planet-outline", activeIcon: "planet" },
   MeTab: { label: "Me", icon: "person-circle-outline", activeIcon: "person-circle" },
 };
@@ -26,7 +26,7 @@ export function MainTabs() {
     <Tab.Navigator tabBar={(props) => <SlidingTabBar {...props} />} screenOptions={{ headerShown: false }}>
       <Tab.Screen name="HomeTab" component={HomeScreen} />
       <Tab.Screen name="ScannerTab" component={ScannerScreen} />
-      <Tab.Screen name="LexTab" component={LexCoachScreen} />
+      <Tab.Screen name="LexTab" component={AskLexScreen} />
       <Tab.Screen name="LexWorldTab" component={LexWorldScreen} />
       <Tab.Screen name="MeTab" component={ProfileScreen} />
     </Tab.Navigator>

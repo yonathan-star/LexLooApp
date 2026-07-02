@@ -4,6 +4,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { LexLooMark } from "../../components/LexLooMark";
+import { LexMascot } from "../../components/LexMascot";
 import { ProfileAvatar } from "../../components/ProfileAvatar";
 import { ErrorState, LoadingState } from "../../components/StateViews";
 import { useAuth } from "../../context/AuthContext";
@@ -30,6 +31,12 @@ export function LexWorldScreen() {
   const rankPercent = nextXp > 0 ? Math.min(100, Math.round((xp / nextXp) * 100)) : 100;
   const savedPreview = savedWords.data?.slice(0, 3) ?? [];
   const packs = progressByPack.data?.slice(0, 3) ?? [];
+  const nextPack = packs.find((pack) => pack.percent < 100) ?? packs[0];
+  const nextAction = savedPreview.length
+    ? { title: "Review a saved word", body: `${savedPreview[0].text} is waiting in your collection.`, label: "Review", route: "SavedWords" }
+    : nextPack
+      ? { title: `Build ${nextPack.name}`, body: `${nextPack.percent}% complete. Push this island forward.`, label: "Practice", route: "PracticeSetup" }
+      : { title: "Choose your first pack", body: "Start a vocabulary island before chasing rewards.", label: "Browse Packs", route: "PackLibrary" };
 
   return (
     <SafeAreaView style={styles.safe} edges={["top", "left", "right"]}>
@@ -46,9 +53,14 @@ export function LexWorldScreen() {
         </View>
 
         <View style={styles.hero}>
-          <Text style={styles.eyebrow}>LexWorld</Text>
-          <Text style={styles.title}>Your vocabulary world.</Text>
-          <Text style={styles.subtitle}>Review saved words, browse packs, practice games, and track every word segment you build.</Text>
+          <View style={styles.heroTop}>
+            <View style={{ flex: 1 }}>
+              <Text style={styles.eyebrow}>LexWorld</Text>
+              <Text style={styles.title}>Build your word map.</Text>
+              <Text style={styles.subtitle}>Pick a place to grow. The map changes as you save, practice, and master words.</Text>
+            </View>
+            <LexMascot size={108} mood="coach" />
+          </View>
           <View style={styles.statsRow}>
             <MiniStat label="Words" value={(summary?.learnedCount ?? 0).toLocaleString()} />
             <MiniStat label="Mastered" value={(summary?.masteredCount ?? 0).toLocaleString()} />
@@ -56,11 +68,49 @@ export function LexWorldScreen() {
           </View>
         </View>
 
-        <View style={styles.primaryGrid}>
-          <WorldAction icon="bookmark" title="Saved Words" body="Search and review your collection." onPress={() => navigation.navigate("SavedWords")} />
-          <WorldAction icon="albums" title="Learn Packs" body="Choose Daily, School, Fun, or Challenge words." onPress={() => navigation.navigate("PackLibrary")} />
-          <WorldAction icon="game-controller" title="Games" body="Quiz, match, spell, and build sentences." onPress={() => navigation.navigate("PracticeSetup")} />
-          <WorldAction icon="sparkles" title="Ask Lex" body="Ask for hints, examples, and what to practice next." onPress={() => navigation.navigate("AskLex")} />
+        <View style={styles.nextCard}>
+          <View style={styles.nextIcon}>
+            <Ionicons name="navigate" size={22} color={colors.onPrimary} />
+          </View>
+          <View style={{ flex: 1 }}>
+            <Text style={styles.nextTitle}>{nextAction.title}</Text>
+            <Text style={styles.nextBody}>{nextAction.body}</Text>
+          </View>
+          <Pressable style={styles.nextButton} onPress={() => navigation.navigate(nextAction.route)}>
+            <Text style={styles.nextButtonText}>{nextAction.label}</Text>
+          </Pressable>
+        </View>
+
+        <View style={styles.mapCard}>
+          <View style={styles.mapRail} />
+          <WorldNode
+            icon="albums"
+            title="Packs"
+            value={`${packs.length || 0} active`}
+            side="left"
+            onPress={() => navigation.navigate("PackLibrary")}
+          />
+          <WorldNode
+            icon="game-controller"
+            title="Practice"
+            value="Quiz · Match · Spell"
+            side="right"
+            onPress={() => navigation.navigate("PracticeSetup")}
+          />
+          <WorldNode
+            icon="bookmark"
+            title="Saved"
+            value={`${savedPreview.length ? summary?.savedCount ?? 0 : 0} words`}
+            side="left"
+            onPress={() => navigation.navigate("SavedWords")}
+          />
+          <WorldNode
+            icon="trophy"
+            title="Trophies"
+            value="Milestones"
+            side="right"
+            onPress={() => navigation.navigate("Achievements")}
+          />
         </View>
 
         <View style={styles.rankCard}>
@@ -126,16 +176,19 @@ function MiniStat({ label, value }: { label: string; value: string }) {
   );
 }
 
-function WorldAction({ icon, title, body, onPress }: { icon: keyof typeof Ionicons.glyphMap; title: string; body: string; onPress: () => void }) {
+function WorldNode({ icon, title, value, side, onPress }: { icon: keyof typeof Ionicons.glyphMap; title: string; value: string; side: "left" | "right"; onPress: () => void }) {
   const colors = useColors();
   const styles = useMemo(() => createStyles(colors), [colors]);
   return (
-    <Pressable style={styles.actionCard} onPress={onPress}>
-      <View style={styles.actionIcon}>
-        <Ionicons name={icon} size={22} color={colors.primary} />
+    <Pressable style={[styles.worldNode, side === "right" && styles.worldNodeRight]} onPress={onPress}>
+      <View style={styles.nodeIcon}>
+        <Ionicons name={icon} size={22} color={colors.onPrimary} />
       </View>
-      <Text style={styles.actionTitle}>{title}</Text>
-      <Text style={styles.actionBody}>{body}</Text>
+      <View style={styles.nodeCopy}>
+        <Text style={styles.nodeTitle}>{title}</Text>
+        <Text style={styles.nodeValue}>{value}</Text>
+      </View>
+      <Ionicons name="chevron-forward" size={18} color={colors.textMuted} />
     </Pressable>
   );
 }
@@ -183,6 +236,7 @@ function createStyles(colors: ReturnType<typeof useColors>) {
     streakPill: { flexDirection: "row", alignItems: "center", gap: 6, backgroundColor: colors.primaryWash, borderRadius: radius.pill, paddingHorizontal: spacing.sm, paddingVertical: 8 },
     streakText: { color: colors.primary, fontFamily: fontFamily.bodyBold, fontSize: 12 },
     hero: { borderRadius: 32, backgroundColor: colors.card, borderWidth: 1, borderColor: colors.border, padding: spacing.lg, ...shadow.card },
+    heroTop: { flexDirection: "row", alignItems: "center", gap: spacing.sm },
     eyebrow: { color: colors.accentOrange, fontFamily: fontFamily.bodyBold, fontSize: 12, letterSpacing: 1.4, textTransform: "uppercase" },
     title: { color: colors.textPrimary, fontFamily: fontFamily.display, fontSize: fontSize.display, lineHeight: 38, marginTop: spacing.sm },
     subtitle: { color: colors.textSecondary, fontFamily: fontFamily.body, fontSize: 15, lineHeight: 24, marginTop: spacing.sm },
@@ -190,11 +244,20 @@ function createStyles(colors: ReturnType<typeof useColors>) {
     miniStat: { flex: 1, borderRadius: 18, backgroundColor: colors.cardHighest, padding: spacing.sm, alignItems: "center" },
     miniValue: { color: colors.textPrimary, fontFamily: fontFamily.headline, fontSize: 17 },
     miniLabel: { color: colors.textMuted, fontFamily: fontFamily.bodyBold, fontSize: 11, marginTop: 3 },
-    primaryGrid: { flexDirection: "row", flexWrap: "wrap", justifyContent: "space-between", rowGap: spacing.md },
-    actionCard: { width: "48%", minHeight: 152, borderRadius: radius.xl, backgroundColor: colors.card, borderWidth: 1, borderColor: colors.border, padding: spacing.md, ...shadow.card },
-    actionIcon: { width: 42, height: 42, borderRadius: 15, backgroundColor: colors.primaryWash, alignItems: "center", justifyContent: "center", marginBottom: spacing.sm },
-    actionTitle: { color: colors.textPrimary, fontFamily: fontFamily.headline, fontSize: 17 },
-    actionBody: { color: colors.textSecondary, fontFamily: fontFamily.body, fontSize: 13, lineHeight: 19, marginTop: 6 },
+    nextCard: { minHeight: 104, borderRadius: radius.xl, backgroundColor: colors.card, borderWidth: 1, borderColor: colors.borderStrong, padding: spacing.md, flexDirection: "row", alignItems: "center", gap: spacing.md, ...shadow.card },
+    nextIcon: { width: 48, height: 48, borderRadius: 17, backgroundColor: colors.primary, alignItems: "center", justifyContent: "center" },
+    nextTitle: { color: colors.textPrimary, fontFamily: fontFamily.headline, fontSize: 16 },
+    nextBody: { color: colors.textSecondary, fontFamily: fontFamily.body, fontSize: 13, lineHeight: 19, marginTop: 3 },
+    nextButton: { borderRadius: radius.pill, backgroundColor: colors.primaryWash, paddingHorizontal: spacing.md, paddingVertical: 10 },
+    nextButtonText: { color: colors.primary, fontFamily: fontFamily.bodyBold, fontSize: 12 },
+    mapCard: { minHeight: 430, borderRadius: 32, backgroundColor: colors.card, borderWidth: 1, borderColor: colors.border, padding: spacing.md, gap: spacing.md, overflow: "hidden", ...shadow.card },
+    mapRail: { position: "absolute", top: 38, bottom: 38, left: "50%", width: 2, backgroundColor: colors.borderStrong },
+    worldNode: { width: "78%", minHeight: 78, alignSelf: "flex-start", borderRadius: 22, backgroundColor: colors.backgroundElevated, borderWidth: 1, borderColor: colors.border, padding: spacing.md, flexDirection: "row", alignItems: "center", gap: spacing.sm },
+    worldNodeRight: { alignSelf: "flex-end" },
+    nodeIcon: { width: 44, height: 44, borderRadius: 16, backgroundColor: colors.primary, alignItems: "center", justifyContent: "center" },
+    nodeCopy: { flex: 1 },
+    nodeTitle: { color: colors.textPrimary, fontFamily: fontFamily.headline, fontSize: 16 },
+    nodeValue: { color: colors.textSecondary, fontFamily: fontFamily.bodyBold, fontSize: 12, marginTop: 3 },
     rankCard: { borderRadius: radius.xl, backgroundColor: colors.primary, padding: spacing.lg, ...glow.primary },
     rankHeader: { flexDirection: "row", justifyContent: "space-between", gap: spacing.md, alignItems: "center" },
     rankTitle: { color: colors.onPrimary, fontFamily: fontFamily.headline, fontSize: fontSize.lg },

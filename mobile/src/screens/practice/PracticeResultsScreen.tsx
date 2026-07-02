@@ -61,7 +61,7 @@ export function PracticeResultsScreen() {
           <Ionicons name="flash" size={18} color={colors.primary} />
           <Text style={styles.headerLabel}>{levelLabel}</Text>
         </View>
-        <Text style={styles.headerTitle}>Mission Success!</Text>
+        <Text style={styles.headerTitle}>Practice Complete</Text>
         <Ionicons name="sparkles" size={18} color={colors.primary} />
       </View>
 
@@ -88,8 +88,8 @@ export function PracticeResultsScreen() {
           <View style={styles.medallionGlow} />
           <View style={styles.medallionCard}>
             <Image source={{ uri: MEDALLION }} style={styles.medallionImage} />
-            <Text style={styles.unlockLabel}>{firstBadge ? "ACHIEVEMENT UNLOCKED" : "MISSION COMPLETE"}</Text>
-            <Text style={styles.unlockTitle}>{firstBadge?.name ?? firstBadge?.code ?? "Practice Streak"}</Text>
+            <Text style={styles.unlockLabel}>{firstBadge ? "ACHIEVEMENT UNLOCKED" : "SESSION SUMMARY"}</Text>
+            <Text style={styles.unlockTitle}>{firstBadge?.name ?? firstBadge?.code ?? (isStrongResult ? "Strong practice" : "Keep building")}</Text>
           </View>
         </View>
 
@@ -134,7 +134,7 @@ export function PracticeResultsScreen() {
           }}
         >
           <Ionicons name="share-social-outline" size={16} color={colors.textSecondary} />
-          <Text style={styles.shareText}>Share Achievement</Text>
+          <Text style={styles.shareText}>{firstBadge ? "Share Achievement" : "Share Practice"}</Text>
         </Pressable>
       </ScrollView>
     </SafeAreaView>

@@ -77,9 +77,15 @@ export function AskLexScreen() {
     <SafeAreaView style={styles.safe} edges={["top", "left", "right"]}>
       <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
         <View style={styles.topBar}>
-          <Pressable style={styles.backButton} onPress={() => navigation.goBack()}>
-            <Ionicons name="chevron-back" size={24} color={colors.textPrimary} />
-          </Pressable>
+          {route.name !== "LexTab" && navigation.canGoBack() ? (
+            <Pressable style={styles.backButton} onPress={() => navigation.goBack()}>
+              <Ionicons name="chevron-back" size={24} color={colors.textPrimary} />
+            </Pressable>
+          ) : (
+            <View style={styles.backButton}>
+              <Ionicons name="chatbubble-ellipses" size={22} color={colors.primary} />
+            </View>
+          )}
           <LexLooMark />
           <View style={styles.pill}>
             <Text style={styles.pillText}>Ask Lex</Text>
